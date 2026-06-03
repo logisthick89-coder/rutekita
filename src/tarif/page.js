@@ -137,7 +137,7 @@ export default function Tarif() {
  
       {/* BOTTOM NAV */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 border-t border-gray-100 flex h-14 z-40">
-        {[['/', '🏠', 'Beranda'], ['/', '🚌', 'Trayek'], ['/', '🗺️', 'Peta'], ['/jadwal', '📅', 'Jadwal']].map(([href, icon, label]) => (
+        {[['/', '🏠', 'Beranda'], ['/', '🚌', 'Trayek'], ['/peta', '🗺️', 'Peta'], ['/jadwal', '📅', 'Jadwal']].map(([href, icon, label]) => (
           <Link key={label} href={href}
             className="flex-1 flex flex-col items-center justify-center gap-0.5 text-xs text-gray-400 hover:text-green-600">
             <span className="text-lg">{icon}</span>{label}
