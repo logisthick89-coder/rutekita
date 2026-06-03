@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import Link from 'next/link';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -16,7 +17,6 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // State untuk panel detail
   const [selected, setSelected] = useState(null);
   const [detail, setDetail] = useState({ halte: [], jadwal: [], tarif: [] });
   const [detailLoading, setDetailLoading] = useState(false);
@@ -31,7 +31,6 @@ export default function Home() {
     fetchTrayek();
   }, []);
 
-  // Fetch detail saat kartu diklik
   async function openDetail(trayek) {
     setSelected(trayek);
     setActiveTab('halte');
@@ -68,13 +67,16 @@ export default function Home() {
 
       {/* NAVBAR */}
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-green-100 px-6 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-bold text-lg">
+        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
           <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white text-sm">R</div>
           Rute<span className="text-green-600">Kita</span>
-        </div>
+        </Link>
         <div className="flex gap-1">
-          {['Beranda','Trayek','Jadwal','Tarif'].map(m => (
-            <button key={m} className="px-3 py-1.5 rounded-full text-sm text-gray-500 hover:bg-green-50 hover:text-green-700">{m}</button>
+          {[['/', 'Beranda'], ['/', 'Trayek'], ['/jadwal', 'Jadwal'], ['/tarif', 'Tarif']].map(([href, label]) => (
+            <Link key={label} href={href}
+              className="px-3 py-1.5 rounded-full text-sm text-gray-500 hover:bg-green-50 hover:text-green-700">
+              {label}
+            </Link>
           ))}
         </div>
       </nav>
@@ -137,19 +139,18 @@ export default function Home() {
 
       {/* BOTTOM NAV */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 border-t border-gray-100 flex h-14 z-40">
-        {[['🏠','Beranda'],['🚌','Trayek'],['🗺️','Peta'],['📅','Jadwal']].map(([icon,label]) => (
-          <button key={label} className="flex-1 flex flex-col items-center justify-center gap-0.5 text-xs text-gray-400 hover:text-green-600">
+        {[['/', '🏠', 'Beranda'], ['/', '🚌', 'Trayek'], ['/', '🗺️', 'Peta'], ['/jadwal', '📅', 'Jadwal']].map(([href, icon, label]) => (
+          <Link key={label} href={href}
+            className={`flex-1 flex flex-col items-center justify-center gap-0.5 text-xs transition-all
+            ${label === 'Jadwal' ? 'text-green-600' : 'text-gray-400 hover:text-green-600'}`}>
             <span className="text-lg">{icon}</span>{label}
-          </button>
+          </Link>
         ))}
       </div>
 
       {/* OVERLAY */}
       {selected && (
-        <div
-          className="fixed inset-0 bg-black/40 z-50 transition-opacity"
-          onClick={closeDetail}
-        />
+        <div className="fixed inset-0 bg-black/40 z-50 transition-opacity" onClick={closeDetail} />
       )}
 
       {/* SLIDE UP PANEL */}
@@ -157,14 +158,12 @@ export default function Home() {
         ${selected ? 'translate-y-0' : 'translate-y-full'}`}
         style={{ maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}>
 
-        {/* Handle bar */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
           <div className="w-10 h-1 bg-gray-200 rounded-full"></div>
         </div>
 
         {selected && (
           <>
-            {/* Header panel */}
             <div className="px-5 pt-3 pb-4 border-b border-gray-100 flex-shrink-0">
               <div className="flex items-start justify-between">
                 <div>
@@ -185,8 +184,6 @@ export default function Home() {
                   ×
                 </button>
               </div>
-
-              {/* Info singkat */}
               <div className="flex gap-3 mt-3">
                 <div className="flex-1 bg-green-50 rounded-lg px-3 py-2 text-center">
                   <div className="text-xs text-gray-400 mb-0.5">Jam Operasi</div>
@@ -203,26 +200,21 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Tab Navigation */}
             <div className="flex border-b border-gray-100 flex-shrink-0">
               {[['halte','🚏 Halte'],['jadwal','⏰ Jadwal'],['tarif','💰 Tarif']].map(([tab, label]) => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
                   className={`flex-1 py-3 text-xs font-semibold transition-all
-                  ${activeTab === tab
-                    ? 'text-green-600 border-b-2 border-green-600'
-                    : 'text-gray-400 hover:text-gray-600'}`}>
+                  ${activeTab === tab ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-400 hover:text-gray-600'}`}>
                   {label}
                 </button>
               ))}
             </div>
 
-            {/* Tab Content */}
             <div className="overflow-y-auto flex-1 px-5 py-4 pb-8">
               {detailLoading ? (
                 <div className="text-center py-8 text-gray-400 text-sm">Memuat detail...</div>
               ) : (
                 <>
-                  {/* TAB HALTE */}
                   {activeTab === 'halte' && (
                     <div>
                       {detail.halte.length === 0 ? (
@@ -231,7 +223,6 @@ export default function Home() {
                         <div className="relative">
                           {detail.halte.map((h, i) => (
                             <div key={h.id} className="flex gap-3 mb-1">
-                              {/* Garis & titik */}
                               <div className="flex flex-col items-center">
                                 <div className={`w-3 h-3 rounded-full border-2 mt-0.5 flex-shrink-0
                                   ${i === 0 ? 'bg-green-600 border-green-600'
@@ -242,7 +233,6 @@ export default function Home() {
                                   <div className="w-0.5 bg-green-200 flex-1 min-h-[20px]"></div>
                                 )}
                               </div>
-                              {/* Nama halte */}
                               <div className={`pb-3 text-sm ${i === 0 || i === detail.halte.length - 1 ? 'font-semibold text-gray-800' : 'text-gray-600'}`}>
                                 {h.nama_halte}
                               </div>
@@ -253,14 +243,12 @@ export default function Home() {
                     </div>
                   )}
 
-                  {/* TAB JADWAL */}
                   {activeTab === 'jadwal' && (
                     <div>
                       {detail.jadwal.length === 0 ? (
                         <div className="text-center py-6 text-gray-400 text-sm">Belum ada data jadwal.</div>
                       ) : (
                         <div>
-                          {/* Hari operasi info */}
                           {detail.jadwal[0]?.hari_operasi && (
                             <div className="bg-green-50 rounded-lg px-3 py-2 mb-4 text-xs text-green-700 font-medium">
                               📅 Beroperasi: {detail.jadwal[0].hari_operasi}
@@ -281,7 +269,6 @@ export default function Home() {
                     </div>
                   )}
 
-                  {/* TAB TARIF */}
                   {activeTab === 'tarif' && (
                     <div>
                       {detail.tarif.length === 0 ? (
