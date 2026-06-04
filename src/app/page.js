@@ -11,19 +11,17 @@ const supabase = createClient(
 function formatRp(n) { return 'Rp' + n.toLocaleString('id-ID'); }
 
 export default function Home() {
-  const [stats, setStats] = useState({ trayek: 0, jadwal: 0, halte: 0 });
+  const [stats, setStats] = useState({ trayek: 0, jadwal: 0 });
 
   useEffect(() => {
     async function fetchStats() {
-      const [t, j, h] = await Promise.all([
+      const [t, j] = await Promise.all([
         supabase.from('trayek').select('id', { count: 'exact' }),
         supabase.from('jadwal').select('id', { count: 'exact' }),
-        supabase.from('halte').select('id', { count: 'exact' }),
       ]);
       setStats({
         trayek: t.count || 0,
         jadwal: j.count || 0,
-        halte: h.count || 0,
       });
     }
     fetchStats();
@@ -159,11 +157,10 @@ export default function Home() {
 
       {/* STATISTIK */}
       <section className="px-6 pb-12 max-w-5xl mx-auto">
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-12">
           {[
             { num: stats.trayek, label: 'Trayek Aktif', color: 'from-violet-600 to-indigo-600', icon: '🚌' },
             { num: stats.jadwal, label: 'Jadwal/hari', color: 'from-blue-600 to-cyan-600', icon: '⏰' },
-            { num: stats.halte, label: 'Halte', color: 'from-emerald-600 to-teal-600', icon: '🚏' },
           ].map(({ num, label, color, icon }) => (
             <div key={label} className={`bg-gradient-to-br ${color} rounded-2xl p-4 md:p-6 text-center`}>
               <div className="text-2xl md:text-3xl mb-1">{icon}</div>
