@@ -15,15 +15,15 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchStats() {
-      const [t, j, h] = await Promise.all([
+      const [t, j, armadaRes] = await Promise.all([
         supabase.from('trayek').select('id', { count: 'exact' }),
         supabase.from('jadwal').select('id', { count: 'exact' }),
-        supabase.from('halte').select('id', { count: 'exact' }),
+        supabase.from('trayek').select('jumlah_armada'),
       ]);
       setStats({
         trayek: t.count || 0,
         jadwal: j.count || 0,
-        halte: h.count || 0,
+        armada: (armadaRes.data || []).reduce((sum, t) => sum + (t.jumlah_armada || 0), 0),
       });
     }
     fetchStats();
@@ -163,7 +163,7 @@ export default function Home() {
           {[
             { num: stats.trayek, label: 'Trayek Aktif', color: 'from-violet-600 to-indigo-600', icon: '🚌' },
             { num: stats.jadwal, label: 'Jadwal/hari', color: 'from-blue-600 to-cyan-600', icon: '⏰' },
-            { num: stats.halte, label: 'Halte', color: 'from-emerald-600 to-teal-600', icon: '🚏' },
+            { num: stats.armada, label: 'Total Armada', color: 'from-emerald-600 to-teal-600', icon: '🚏' },
           ].map(({ num, label, color, icon }) => (
             <div key={label} className={`bg-gradient-to-br ${color} rounded-2xl p-4 md:p-6 text-center`}>
               <div className="text-2xl md:text-3xl mb-1">{icon}</div>
