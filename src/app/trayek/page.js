@@ -10,50 +10,109 @@ const supabase = createClient(
 
 function formatRp(n) { return 'Rp' + n.toLocaleString('id-ID'); }
 
+const JENIS_COLOR = {
+  kota: 'from-violet-600 to-indigo-600',
+  antar: 'from-blue-600 to-cyan-600',
+  pedesaan: 'from-emerald-600 to-teal-600'
+};
+
 export default function Trayek() {
   const [filter, setFilter] = useState('semua');
-  const [asal, setAsal] = useState('');
-  const [tujuan, setTujuan] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Step: 'list' | 'rute' | 'detail'
+  const [step, setStep] = useState('list');
   const [selected, setSelected] = useState(null);
+  const [asalHalte, setAsalHalte] = useState(null);
+  const [tujuanHalte, setTujuanHalte] = useState(null);
   const [detail, setDetail] = useState({ halte: [], jadwal: [], tarif: [] });
   const [detailLoading, setDetailLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('halte');
+  const [activeTab, setActiveTab] = useState('rute');
 
   useEffect(() => {
     async function fetchTrayek() {
-      const { data: trayek } = await supabase.from('trayek').select('*').order('kode_trayek');
+      const { data: trayek } = await supabase
+        .from('trayek')
+        .select('*')
+        .order('kode_trayek');
       setData(trayek || []);
       setLoading(false);
     }
     fetchTrayek();
   }, []);
 
-  async function openDetail(trayek) {
+  async function pilihTrayek(trayek) {
     setSelected(trayek);
-    setActiveTab('halte');
+    setAsalHalte(null);
+    setTujuanHalte(null);
     setDetailLoading(true);
+    setStep('rute');
+
     const [halteRes, jadwalRes, tarifRes] = await Promise.all([
       supabase.from('halte').select('*').eq('trayek_id', trayek.id).order('urutan'),
       supabase.from('jadwal').select('*').eq('trayek_id', trayek.id).order('jam_berangkat'),
       supabase.from('tarif').select('*').eq('trayek_id', trayek.id),
     ]);
-    setDetail({ halte: halteRes.data || [], jadwal: jadwalRes.data || [], tarif: tarifRes.data || [] });
+    setDetail({
+      halte: halteRes.data || [],
+      jadwal: jadwalRes.data || [],
+      tarif: tarifRes.data || []
+    });
     setDetailLoading(false);
   }
 
-  function closeDetail() { setSelected(null); }
-  function swap() { setAsal(tujuan); setTujuan(asal); }
+  function pilihAsal(halte) {
+    setAsalHalte(halte);
+    setTujuanHalte(null);
+  }
 
-  const filtered = data.filter(d => {
-    const cocokFilter = filter === 'semua' || d.jenis === filter;
-    const cocokAsal = !asal || d.asal.toLowerCase().includes(asal.toLowerCase());
-    const cocokTujuan = !tujuan || d.tujuan.toLowerCase().includes(tujuan.toLowerCase());
-    return cocokFilter && cocokAsal && cocokTujuan;
-  });
+  function pilihTujuan(halte) {
+    if (asalHalte && halte.urutan <= asalHalte.urutan) return;
+    setTujuanHalte(halte);
+    setStep('detail');
+    setActiveTab('rute');
+  }
 
-  const JENIS_COLOR = { kota: 'from-violet-600 to-indigo-600', antar: 'from-blue-600 to-cyan-600', pedesaan: 'from-emerald-600 to-teal-600' };
+  function kembaliKeList() {
+    setStep('list');
+    setSelected(null);
+    setAsalHalte(null);
+    setTujuanHalte(null);
+  }
+
+  function kembaliKeRute() {
+    setStep('rute');
+    setTujuanHalte(null);
+    setActiveTab('rute');
+  }
+
+  // Hitung rute dari asal ke tujuan
+  const ruteSegmen = () => {
+    if (!asalHalte || !tujuanHalte) return [];
+    return detail.halte.filter(h =>
+      h.urutan >= asalHalte.urutan && h.urutan <= tujuanHalte.urutan
+    );
+  };
+
+  // Hitung total jarak segmen
+  const totalJarak = () => {
+    const segmen = ruteSegmen();
+    return segmen.slice(0, -1).reduce((sum, h) => sum + (h.jarak_ke_berikutnya || 0), 0).toFixed(1);
+  };
+
+  // Tarif yang relevan
+  const tarifRelevan = () => {
+    if (!asalHalte || !tujuanHalte) return detail.tarif;
+    return detail.tarif.filter(t =>
+      t.segmen_asal.toLowerCase().includes(asalHalte.nama_halte.split(' ')[0].toLowerCase()) ||
+      t.segmen_tujuan.toLowerCase().includes(tujuanHalte.nama_halte.split(' ')[0].toLowerCase())
+    );
+  };
+
+  const filtered = data.filter(d =>
+    filter === 'semua' || d.jenis === filter
+  );
 
   return (
     <main className="min-h-screen bg-[#0f0f1a] font-sans pb-20 md:pb-0">
@@ -76,65 +135,313 @@ export default function Trayek() {
         </div>
       </nav>
 
-      {/* HEADER */}
-      <div className="px-6 py-8 max-w-4xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Daftar Trayek</h1>
-        <p className="text-gray-400 text-sm mb-6">Angkutan umum Kabupaten Garut</p>
+      <div className="px-4 py-6 max-w-4xl mx-auto">
 
-        {/* Search */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5">
-          <div className="flex gap-2 mb-3">
-            <input value={asal} onChange={e=>setAsal(e.target.value)} placeholder="Dari mana?"
-              className="flex-1 h-10 bg-white/10 border border-white/10 rounded-xl px-3 text-sm text-white placeholder-gray-500 outline-none focus:border-violet-500"/>
-            <button onClick={swap} className="w-10 h-10 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-gray-400 hover:bg-white/20">⇄</button>
-            <input value={tujuan} onChange={e=>setTujuan(e.target.value)} placeholder="Ke mana?"
-              className="flex-1 h-10 bg-white/10 border border-white/10 rounded-xl px-3 text-sm text-white placeholder-gray-500 outline-none focus:border-violet-500"/>
-          </div>
-          <button className="w-full h-10 rounded-xl text-sm font-semibold text-white"
-            style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
-            🔍 Cari Trayek
-          </button>
-        </div>
+        {/* ===== STEP 1: DAFTAR TRAYEK ===== */}
+        {step === 'list' && (
+          <>
+            <div className="mb-6">
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Pilih Trayek</h1>
+              <p className="text-gray-400 text-sm">Pilih trayek yang ingin kamu gunakan</p>
+            </div>
 
-        {/* Filter */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-5">
-          {[['semua','Semua'],['kota','Dalam Kota'],['antar','Antar Kecamatan'],['pedesaan','Pedesaan']].map(([val,label]) => (
-            <button key={val} onClick={()=>setFilter(val)}
-              className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-semibold border transition-all
-              ${filter===val ? 'text-white border-transparent' : 'bg-transparent text-gray-400 border-white/10 hover:border-white/30'}`}
-              style={filter===val ? {background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'} : {}}>
-              {label}
-            </button>
-          ))}
-        </div>
+            {/* Filter */}
+            <div className="flex gap-2 overflow-x-auto pb-2 mb-5">
+              {[['semua','Semua'],['kota','Dalam Kota'],['antar','Antar Kecamatan'],['pedesaan','Pedesaan']].map(([val, label]) => (
+                <button key={val} onClick={() => setFilter(val)}
+                  className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-semibold border transition-all
+                  ${filter === val ? 'text-white border-transparent' : 'bg-transparent text-gray-400 border-white/10 hover:border-white/30'}`}
+                  style={filter === val ? {background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'} : {}}>
+                  {label}
+                </button>
+              ))}
+            </div>
 
-        {loading && <div className="text-center py-12 text-gray-500 text-sm">Memuat data trayek...</div>}
+            {loading && <div className="text-center py-12 text-gray-500 text-sm">Memuat data trayek...</div>}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {!loading && filtered.length === 0 && (
-            <div className="col-span-2 text-center py-10 text-gray-500 text-sm">Trayek tidak ditemukan.</div>
-          )}
-          {filtered.map(d => (
-            <div key={d.id} onClick={() => openDetail(d)}
-              className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-violet-500/50 hover:bg-white/10 transition-all cursor-pointer">
-              <div className="flex items-center justify-between mb-3">
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[d.jenis] || 'from-gray-600 to-gray-700'}`}>
-                  Trayek {d.kode_trayek}
-                </span>
-                <span className={`text-xs flex items-center gap-1 ${d.aktif ? 'text-emerald-400' : 'text-red-400'}`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${d.aktif ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
-                  {d.aktif ? 'Aktif' : 'Nonaktif'}
-                </span>
-              </div>
-              <div className="font-bold text-sm text-white mb-1">{d.nama_rute}</div>
-              <div className="text-xs text-gray-500 mb-3">Via {d.via}</div>
-              <div className="flex pt-3 border-t border-white/10">
-                <div className="flex-1 flex items-center gap-1 text-xs text-gray-400">⏰ {d.jam_operasi}</div>
-                <div className="flex-1 flex items-center gap-1 text-xs text-gray-400 border-l border-white/10 pl-3">💰 {formatRp(d.tarif_min)}+</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {filtered.map(d => (
+                <div key={d.id} onClick={() => pilihTrayek(d)}
+                  className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-violet-500/50 hover:bg-white/10 transition-all cursor-pointer group">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[d.jenis] || 'from-gray-600 to-gray-700'}`}>
+                      Trayek {d.kode_trayek}
+                    </span>
+                    <span className={`text-xs flex items-center gap-1 ${d.aktif ? 'text-emerald-400' : 'text-red-400'}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${d.aktif ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+                      {d.aktif ? 'Aktif' : 'Nonaktif'}
+                    </span>
+                  </div>
+                  <div className="font-bold text-sm text-white mb-1">{d.nama_rute}</div>
+                  <div className="text-xs text-gray-500 mb-3">Via {d.via}</div>
+                  <div className="grid grid-cols-3 pt-3 border-t border-white/10 gap-2">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500 mb-0.5">Jam</div>
+                      <div className="text-xs text-white font-medium">{d.jam_operasi}</div>
+                    </div>
+                    <div className="text-center border-x border-white/10">
+                      <div className="text-xs text-gray-500 mb-0.5">Armada</div>
+                      <div className="text-xs text-white font-medium">🚌 {d.jumlah_armada || '-'}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500 mb-0.5">Jarak</div>
+                      <div className="text-xs text-white font-medium">{d.jarak_km || '-'} km</div>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-xs text-violet-400 text-right opacity-0 group-hover:opacity-100 transition-all">
+                    Pilih trayek ini →
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* ===== STEP 2: PILIH DARI MANA - KE MANA ===== */}
+        {step === 'rute' && selected && (
+          <>
+            <div className="flex items-center gap-3 mb-6">
+              <button onClick={kembaliKeList}
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20">
+                ←
+              </button>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[selected.jenis] || 'from-gray-600 to-gray-700'}`}>
+                    Trayek {selected.kode_trayek}
+                  </span>
+                  <span className={`text-xs flex items-center gap-1 ${selected.aktif ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${selected.aktif ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+                    {selected.aktif ? 'Aktif' : 'Nonaktif'}
+                  </span>
+                </div>
+                <h2 className="text-lg font-bold text-white">{selected.nama_rute}</h2>
               </div>
             </div>
-          ))}
-        </div>
+
+            {/* Info trayek */}
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[
+                ['🚌', 'Armada', `${selected.jumlah_armada || '-'} unit`],
+                ['📏', 'Total Jarak', `${selected.jarak_km || '-'} km`],
+                ['⏰', 'Jam Operasi', selected.jam_operasi],
+              ].map(([icon, label, val]) => (
+                <div key={label} className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                  <div className="text-lg mb-1">{icon}</div>
+                  <div className="text-xs text-gray-500 mb-0.5">{label}</div>
+                  <div className="text-xs font-semibold text-white">{val}</div>
+                </div>
+              ))}
+            </div>
+
+            {detailLoading ? (
+              <div className="text-center py-12 text-gray-500 text-sm">Memuat rute...</div>
+            ) : (
+              <>
+                <div className="mb-4">
+                  <p className="text-white font-semibold mb-1">
+                    {!asalHalte ? '📍 Pilih titik naik (asal)' : '🏁 Pilih titik turun (tujuan)'}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    {!asalHalte
+                      ? 'Kamu bisa naik dari titik mana saja sepanjang rute'
+                      : `Naik dari: ${asalHalte.nama_halte} — pilih titik turun`}
+                  </p>
+                </div>
+
+                {/* Timeline rute dengan jarak */}
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                  {detail.halte.map((h, i) => {
+                    const isAsal = asalHalte?.id === h.id;
+                    const isTujuan = tujuanHalte?.id === h.id;
+                    const dalamSegmen = asalHalte && h.urutan >= asalHalte.urutan && (!tujuanHalte || h.urutan <= tujuanHalte.urutan);
+                    const bisaDipilih = !asalHalte || (asalHalte && h.urutan > asalHalte.urutan);
+
+                    return (
+                      <div key={h.id}>
+                        <div className={`flex gap-3 items-start rounded-xl p-2 transition-all
+                          ${bisaDipilih ? 'cursor-pointer hover:bg-white/10' : 'cursor-default'}
+                          ${isAsal ? 'bg-violet-500/20' : ''}
+                          ${isTujuan ? 'bg-emerald-500/20' : ''}`}
+                          onClick={() => {
+                            if (!asalHalte) pilihAsal(h);
+                            else if (h.urutan > asalHalte.urutan) pilihTujuan(h);
+                          }}>
+                          <div className="flex flex-col items-center flex-shrink-0">
+                            <div className={`w-3.5 h-3.5 rounded-full border-2 mt-0.5
+                              ${isAsal ? 'bg-violet-500 border-violet-500' :
+                                isTujuan ? 'bg-emerald-500 border-emerald-500' :
+                                dalamSegmen ? 'bg-violet-500/40 border-violet-500/60' :
+                                i === 0 ? 'bg-blue-500 border-blue-500' :
+                                i === detail.halte.length - 1 ? 'bg-red-400 border-red-400' :
+                                'bg-transparent border-gray-600'}`}/>
+                            {i < detail.halte.length - 1 && (
+                              <div className={`w-0.5 my-0.5 ${dalamSegmen ? 'bg-violet-500/50' : 'bg-white/10'}`}
+                                style={{height: '24px'}}/>
+                            )}
+                          </div>
+                          <div className="flex-1 pb-1">
+                            <div className={`text-sm font-medium
+                              ${isAsal ? 'text-violet-300' :
+                                isTujuan ? 'text-emerald-300' :
+                                i === 0 || i === detail.halte.length - 1 ? 'text-white' : 'text-gray-400'}`}>
+                              {h.nama_halte}
+                              {isAsal && <span className="ml-2 text-xs bg-violet-500/30 text-violet-300 px-1.5 py-0.5 rounded-full">Naik</span>}
+                              {isTujuan && <span className="ml-2 text-xs bg-emerald-500/30 text-emerald-300 px-1.5 py-0.5 rounded-full">Turun</span>}
+                            </div>
+                            {h.jarak_ke_berikutnya > 0 && i < detail.halte.length - 1 && (
+                              <div className="text-xs text-gray-600 mt-0.5">
+                                ↕ {h.jarak_ke_berikutnya} km ke titik berikutnya
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {asalHalte && (
+                  <button onClick={() => { setAsalHalte(null); setTujuanHalte(null); }}
+                    className="mt-3 text-xs text-gray-500 hover:text-gray-300 transition-all">
+                    ↩ Reset pilihan
+                  </button>
+                )}
+              </>
+            )}
+          </>
+        )}
+
+        {/* ===== STEP 3: DETAIL RUTE ===== */}
+        {step === 'detail' && selected && asalHalte && tujuanHalte && (
+          <>
+            <div className="flex items-center gap-3 mb-6">
+              <button onClick={kembaliKeRute}
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20">
+                ←
+              </button>
+              <div>
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[selected.jenis] || 'from-gray-600 to-gray-700'}`}>
+                  Trayek {selected.kode_trayek}
+                </span>
+                <h2 className="text-lg font-bold text-white mt-1">{selected.nama_rute}</h2>
+              </div>
+            </div>
+
+            {/* Ringkasan rute */}
+            <div className="bg-white/5 border border-violet-500/30 rounded-2xl p-4 mb-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex-1">
+                  <div className="text-xs text-gray-500 mb-1">Dari</div>
+                  <div className="text-sm font-bold text-violet-300">📍 {asalHalte.nama_halte}</div>
+                </div>
+                <div className="text-gray-600">→</div>
+                <div className="flex-1 text-right">
+                  <div className="text-xs text-gray-500 mb-1">Ke</div>
+                  <div className="text-sm font-bold text-emerald-300">🏁 {tujuanHalte.nama_halte}</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/10">
+                <div className="text-center">
+                  <div className="text-xs text-gray-500">Jarak</div>
+                  <div className="text-sm font-bold text-white">{totalJarak()} km</div>
+                </div>
+                <div className="text-center border-x border-white/10">
+                  <div className="text-xs text-gray-500">Titik</div>
+                  <div className="text-sm font-bold text-white">{ruteSegmen().length} titik</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs text-gray-500">Armada</div>
+                  <div className="text-sm font-bold text-white">{selected.jumlah_armada} unit</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Tab */}
+            <div className="flex bg-white/5 rounded-xl p-1 mb-5 gap-1">
+              {[['rute', '🗺️ Rute'], ['jadwal', '⏰ Jadwal'], ['tarif', '💰 Tarif']].map(([tab, label]) => (
+                <button key={tab} onClick={() => setActiveTab(tab)}
+                  className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all
+                  ${activeTab === tab ? 'bg-violet-600 text-white' : 'text-gray-500 hover:text-gray-300'}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === 'rute' && (
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                {ruteSegmen().map((h, i) => {
+                  const segmen = ruteSegmen();
+                  return (
+                    <div key={h.id} className="flex gap-3">
+                      <div className="flex flex-col items-center flex-shrink-0">
+                        <div className={`w-3.5 h-3.5 rounded-full border-2 mt-0.5
+                          ${i === 0 ? 'bg-violet-500 border-violet-500' :
+                            i === segmen.length - 1 ? 'bg-emerald-500 border-emerald-500' :
+                            'bg-violet-500/30 border-violet-500/50'}`}/>
+                        {i < segmen.length - 1 && (
+                          <div className="w-0.5 bg-violet-500/30 my-0.5" style={{height: '28px'}}/>
+                        )}
+                      </div>
+                      <div className="flex-1 pb-2">
+                        <div className={`text-sm font-medium
+                          ${i === 0 ? 'text-violet-300' :
+                            i === segmen.length - 1 ? 'text-emerald-300' : 'text-gray-300'}`}>
+                          {h.nama_halte}
+                        </div>
+                        {h.jarak_ke_berikutnya > 0 && i < segmen.length - 1 && (
+                          <div className="text-xs text-gray-600 mt-0.5 flex items-center gap-1">
+                            <span>↕</span>
+                            <span>{h.jarak_ke_berikutnya} km</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {activeTab === 'jadwal' && (
+              <div>
+                <div className="bg-violet-500/10 border border-violet-500/20 rounded-xl px-3 py-2 mb-4 text-xs text-violet-300">
+                  📅 Beroperasi: {detail.jadwal[0]?.hari_operasi || selected.hari_operasi}
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {detail.jadwal.map(j => (
+                    <div key={j.id} className="bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-center hover:border-violet-500/50 transition-all">
+                      <div className="text-sm font-bold text-white">⏰ {j.jam_berangkat}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 text-xs text-gray-500 text-center">{detail.jadwal.length} jadwal/hari • {selected.jumlah_armada} unit armada</div>
+              </div>
+            )}
+
+            {activeTab === 'tarif' && (
+              <div className="flex flex-col gap-2">
+                {detail.tarif.length === 0 ? (
+                  <div className="text-center py-6 text-gray-500 text-sm">Belum ada data tarif.</div>
+                ) : (
+                  <>
+                    {detail.tarif.map(t => (
+                      <div key={t.id} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                        <div className="text-sm text-gray-300">
+                          <span className="font-medium">{t.segmen_asal}</span>
+                          <span className="text-gray-600 mx-2">→</span>
+                          <span className="font-medium">{t.segmen_tujuan}</span>
+                        </div>
+                        <div className="text-sm font-bold text-emerald-400">{formatRp(t.harga)}</div>
+                      </div>
+                    ))}
+                    <div className="mt-1 text-xs text-gray-600 text-center">* Tarif dapat berubah sewaktu-waktu</div>
+                  </>
+                )}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {/* BOTTOM NAV mobile */}
@@ -146,127 +453,6 @@ export default function Trayek() {
             <span className="text-lg">{icon}</span>{label}
           </Link>
         ))}
-      </div>
-
-      {/* OVERLAY */}
-      {selected && <div className="fixed inset-0 bg-black/60 z-50" onClick={closeDetail}/>}
-
-      {/* SLIDE UP PANEL */}
-      <div className={`fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl border-t border-white/10 transition-transform duration-300 ease-in-out
-        ${selected ? 'translate-y-0' : 'translate-y-full'}`}
-        style={{background: '#16162a', maxHeight: '85vh', display: 'flex', flexDirection: 'column'}}>
-
-        <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 bg-white/20 rounded-full"></div>
-        </div>
-
-        {selected && (
-          <>
-            <div className="px-5 pt-3 pb-4 border-b border-white/10 flex-shrink-0">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[selected.jenis] || 'from-gray-600 to-gray-700'}`}>
-                      Trayek {selected.kode_trayek}
-                    </span>
-                    <span className={`text-xs flex items-center gap-1 ${selected.aktif ? 'text-emerald-400' : 'text-red-400'}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${selected.aktif ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
-                      {selected.aktif ? 'Aktif' : 'Nonaktif'}
-                    </span>
-                  </div>
-                  <div className="font-bold text-base text-white">{selected.nama_rute}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Via {selected.via}</div>
-                </div>
-                <button onClick={closeDetail} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20 text-lg">×</button>
-              </div>
-              <div className="flex gap-3 mt-3">
-                {[['⏰', 'Jam Operasi', selected.jam_operasi], ['💰', 'Tarif Mulai', formatRp(selected.tarif_min)+'+'], ['📅', 'Hari', selected.hari_operasi]].map(([icon, label, val]) => (
-                  <div key={label} className="flex-1 bg-white/5 rounded-xl px-3 py-2 text-center">
-                    <div className="text-xs text-gray-500 mb-0.5">{label}</div>
-                    <div className="text-xs font-semibold text-white">{icon} {val}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex border-b border-white/10 flex-shrink-0">
-              {[['halte','🚏 Halte'],['jadwal','⏰ Jadwal'],['tarif','💰 Tarif']].map(([tab, label]) => (
-                <button key={tab} onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-3 text-xs font-semibold transition-all
-                  ${activeTab === tab ? 'text-violet-400 border-b-2 border-violet-400' : 'text-gray-500 hover:text-gray-300'}`}>
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            <div className="overflow-y-auto flex-1 px-5 py-4 pb-8">
-              {detailLoading ? (
-                <div className="text-center py-8 text-gray-500 text-sm">Memuat detail...</div>
-              ) : (
-                <>
-                  {activeTab === 'halte' && (
-                    <div>
-                      {detail.halte.length === 0 ? <div className="text-center py-6 text-gray-500 text-sm">Belum ada data halte.</div> : (
-                        detail.halte.map((h, i) => (
-                          <div key={h.id} className="flex gap-3 mb-1">
-                            <div className="flex flex-col items-center">
-                              <div className={`w-3 h-3 rounded-full border-2 mt-0.5 flex-shrink-0
-                                ${i === 0 ? 'bg-violet-500 border-violet-500' : i === detail.halte.length-1 ? 'bg-red-400 border-red-400' : 'bg-transparent border-violet-500/50'}`}/>
-                              {i < detail.halte.length-1 && <div className="w-0.5 bg-violet-500/20 flex-1 min-h-[20px]"/>}
-                            </div>
-                            <div className={`pb-3 text-sm ${i === 0 || i === detail.halte.length-1 ? 'font-semibold text-white' : 'text-gray-400'}`}>
-                              {h.nama_halte}
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  )}
-                  {activeTab === 'jadwal' && (
-                    <div>
-                      {detail.jadwal.length === 0 ? <div className="text-center py-6 text-gray-500 text-sm">Belum ada data jadwal.</div> : (
-                        <>
-                          {detail.jadwal[0]?.hari_operasi && (
-                            <div className="bg-violet-500/10 border border-violet-500/20 rounded-xl px-3 py-2 mb-4 text-xs text-violet-300 font-medium">
-                              📅 Beroperasi: {detail.jadwal[0].hari_operasi}
-                            </div>
-                          )}
-                          <div className="grid grid-cols-3 gap-2">
-                            {detail.jadwal.map(j => (
-                              <div key={j.id} className="bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-center">
-                                <div className="text-sm font-bold text-white">⏰ {j.jam_berangkat}</div>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="mt-3 text-xs text-gray-500 text-center">{detail.jadwal.length} jadwal keberangkatan/hari</div>
-                        </>
-                      )}
-                    </div>
-                  )}
-                  {activeTab === 'tarif' && (
-                    <div>
-                      {detail.tarif.length === 0 ? <div className="text-center py-6 text-gray-500 text-sm">Belum ada data tarif.</div> : (
-                        <div className="flex flex-col gap-2">
-                          {detail.tarif.map(t => (
-                            <div key={t.id} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3">
-                              <div className="text-sm text-gray-300">
-                                <span className="font-medium">{t.segmen_asal}</span>
-                                <span className="text-gray-600 mx-2">→</span>
-                                <span className="font-medium">{t.segmen_tujuan}</span>
-                              </div>
-                              <div className="text-sm font-bold text-emerald-400">{formatRp(t.harga)}</div>
-                            </div>
-                          ))}
-                          <div className="mt-2 text-xs text-gray-600 text-center">* Tarif dapat berubah sewaktu-waktu</div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          </>
-        )}
       </div>
     </main>
   );
