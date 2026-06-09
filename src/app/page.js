@@ -142,7 +142,7 @@ export default function Home() {
 
           {/* Ilustrasi — lebih kecil di mobile */}
           <div className="flex-1 flex justify-center">
-            <div className="relative w-full max-w-[240px] md:max-w-sm">
+            <div className="relative w-full max-w-[200px] md:max-w-sm">
               <div className="absolute inset-0 rounded-3xl opacity-20"
                 style={{background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)'}}></div>
               <svg viewBox="0 0 320 220" className="w-full" xmlns="http://www.w3.org/2000/svg">
@@ -270,7 +270,7 @@ export default function Home() {
       </div>
 
       {/* Chatbot FAB — hanya di desktop, atau mobile tapi tidak menimpa nav */}
-      <button className="fixed bottom-20 right-4 md:bottom-6 md:right-6 w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-50"
+      <button className="hidden md:flex fixed bottom-6 right-6 w-12 h-12 rounded-full items-center justify-center shadow-lg z-50"
         style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
         <IconChat size={20} className="text-white"/>
       </button>
