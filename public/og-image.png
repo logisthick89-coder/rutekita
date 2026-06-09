@@ -1,0 +1,94 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0f0f1a"/>
+
+  <!-- Grid dots -->
+  <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <circle cx="20" cy="20" r="1" fill="#ffffff" opacity="0.06"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Glow kiri -->
+  <ellipse cx="200" cy="315" rx="300" ry="300" fill="#6366f1" opacity="0.12"/>
+  <!-- Glow kanan -->
+  <ellipse cx="1000" cy="315" rx="250" ry="250" fill="#8b5cf6" opacity="0.08"/>
+
+  <!-- Logo box -->
+  <rect x="80" y="80" width="64" height="64" rx="16" fill="url(#logoGrad)"/>
+  <defs>
+    <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="50%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+  <text x="112" y="123" text-anchor="middle" fill="white" font-size="32" font-weight="700" font-family="sans-serif">R</text>
+
+  <!-- Brand name -->
+  <text x="160" y="126" fill="white" font-size="36" font-weight="700" font-family="sans-serif">Rute<tspan fill="#a78bfa">Kita</tspan></text>
+
+  <!-- Badge -->
+  <rect x="80" y="168" width="230" height="32" rx="16" fill="#6366f1" opacity="0.2"/>
+  <rect x="80" y="168" width="230" height="32" rx="16" fill="none" stroke="#6366f1" stroke-width="1" opacity="0.4"/>
+  <circle cx="102" cy="184" r="5" fill="#34d399"/>
+  <text x="116" y="189" fill="#a78bfa" font-size="14" font-family="sans-serif">Data resmi Dishub Garut</text>
+
+  <!-- Headline -->
+  <text x="80" y="290" fill="white" font-size="64" font-weight="700" font-family="sans-serif">Angkutan Umum</text>
+  <text x="80" y="370" fill="url(#textGrad)" font-size="64" font-weight="700" font-family="sans-serif">Kabupaten Garut</text>
+
+  <!-- Deskripsi -->
+  <text x="80" y="430" fill="#9ca3af" font-size="24" font-family="sans-serif">Trayek · Jadwal · Tarif · Peta Rute</text>
+
+  <!-- Stats cards -->
+  <rect x="80" y="490" width="180" height="90" rx="16" fill="#ffffff" opacity="0.05"/>
+  <rect x="80" y="490" width="180" height="90" rx="16" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.1"/>
+  <text x="170" y="530" text-anchor="middle" fill="white" font-size="32" font-weight="700" font-family="sans-serif">5</text>
+  <text x="170" y="560" text-anchor="middle" fill="#9ca3af" font-size="14" font-family="sans-serif">Trayek Aktif</text>
+
+  <rect x="280" y="490" width="180" height="90" rx="16" fill="#ffffff" opacity="0.05"/>
+  <rect x="280" y="490" width="180" height="90" rx="16" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.1"/>
+  <text x="370" y="530" text-anchor="middle" fill="white" font-size="32" font-weight="700" font-family="sans-serif">34</text>
+  <text x="370" y="560" text-anchor="middle" fill="#9ca3af" font-size="14" font-family="sans-serif">Jadwal/hari</text>
+
+  <rect x="480" y="490" width="180" height="90" rx="16" fill="#ffffff" opacity="0.05"/>
+  <rect x="480" y="490" width="180" height="90" rx="16" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.1"/>
+  <text x="570" y="530" text-anchor="middle" fill="white" font-size="32" font-weight="700" font-family="sans-serif">41</text>
+  <text x="570" y="560" text-anchor="middle" fill="#9ca3af" font-size="14" font-family="sans-serif">Total Armada</text>
+
+  <!-- Ilustrasi angkot kanan -->
+  <rect x="780" y="200" width="180" height="80" rx="14" fill="#4f46e5"/>
+  <rect x="780" y="200" width="180" height="28" rx="14" fill="#6366f1"/>
+  <rect x="795" y="210" width="120" height="14" rx="4" fill="#93c5fd" opacity="0.7"/>
+  <circle cx="810" cy="284" r="16" fill="#1f2937"/>
+  <circle cx="810" cy="284" r="9" fill="#374151"/>
+  <circle cx="930" cy="284" r="16" fill="#1f2937"/>
+  <circle cx="930" cy="284" r="9" fill="#374151"/>
+  <text x="870" y="252" text-anchor="middle" fill="white" font-size="14" font-weight="700" font-family="sans-serif">GARUT KOTA</text>
+
+  <rect x="820" y="320" width="160" height="72" rx="14" fill="#059669"/>
+  <rect x="820" y="320" width="160" height="24" rx="14" fill="#10b981"/>
+  <rect x="834" y="329" width="110" height="12" rx="3" fill="#6ee7b7" opacity="0.7"/>
+  <circle cx="848" cy="396" r="14" fill="#1f2937"/>
+  <circle cx="848" cy="396" r="8" fill="#374151"/>
+  <circle cx="960" cy="396" r="14" fill="#1f2937"/>
+  <circle cx="960" cy="396" r="8" fill="#374151"/>
+  <text x="904" y="360" text-anchor="middle" fill="white" font-size="13" font-weight="700" font-family="sans-serif">TAROGONG</text>
+
+  <!-- Jalan -->
+  <rect x="760" y="408" width="400" height="30" fill="#1f2937"/>
+  <rect x="760" y="420" width="30" height="4" rx="2" fill="#facc15" opacity="0.7"/>
+  <rect x="810" y="420" width="30" height="4" rx="2" fill="#facc15" opacity="0.7"/>
+  <rect x="860" y="420" width="30" height="4" rx="2" fill="#facc15" opacity="0.7"/>
+  <rect x="910" y="420" width="30" height="4" rx="2" fill="#facc15" opacity="0.7"/>
+  <rect x="960" y="420" width="30" height="4" rx="2" fill="#facc15" opacity="0.7"/>
+  <rect x="1010" y="420" width="30" height="4" rx="2" fill="#facc15" opacity="0.7"/>
+  <rect x="1060" y="420" width="30" height="4" rx="2" fill="#facc15" opacity="0.7"/>
+
+  <!-- URL -->
+  <text x="1120" y="600" text-anchor="end" fill="#6b7280" font-size="18" font-family="sans-serif">rutekita-delta.vercel.app</text>
+</svg>
