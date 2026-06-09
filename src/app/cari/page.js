@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import BottomNav from '@/components/BottomNav';
+import { SkeletonCariCard } from '@/components/Skeleton';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 const supabase = createClient(
@@ -263,7 +264,7 @@ function CariContent() {
           </div>
         )}
         {query.trim() && loading && (
-          <div className="text-center py-12 text-gray-500 text-sm">Mencari...</div>
+          <div className="flex flex-col gap-3">{[0,1,2].map(i => <SkeletonCariCard key={i} />)}</div>
         )}
         {query.trim() && !loading && hasil.length === 0 && (
           <div className="text-center py-16">

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { SkeletonStatCard } from '@/components/Skeleton';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -62,6 +63,7 @@ const IconRobot = ({ size = 36, className = '' }) => (
 
 export default function Home() {
   const [stats, setStats] = useState({ trayek: 0, jadwal: 0, armada: 0 });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchStats() {
@@ -70,6 +72,7 @@ export default function Home() {
         supabase.from('jadwal').select('id', { count: 'exact' }),
         supabase.from('trayek').select('jumlah_armada'),
       ]);
+      setLoading(false);
       setStats({
         trayek: t.count || 0,
         jadwal: j.count || 0,
@@ -197,17 +200,21 @@ export default function Home() {
       {/* STATISTIK */}
       <section className="px-6 pb-10 max-w-5xl mx-auto">
         <div className="grid grid-cols-3 gap-3 md:gap-4 mb-10">
-          {[
-            { num: stats.trayek, label: 'Trayek Aktif', color: 'from-violet-600 to-indigo-600', icon: <IconBus size={24} className="text-white/90"/> },
-            { num: stats.jadwal, label: 'Jadwal/hari', color: 'from-blue-600 to-cyan-600', icon: <IconClock size={24} className="text-white/90"/> },
-            { num: stats.armada, label: 'Total Armada', color: 'from-emerald-600 to-teal-600', icon: <IconUsers size={24} className="text-white/90"/> },
-          ].map(({ num, label, color, icon }) => (
-            <div key={label} className={`bg-gradient-to-br ${color} rounded-2xl p-3 md:p-6 text-center`}>
-              <div className="flex justify-center mb-1">{icon}</div>
-              <div className="text-xl md:text-4xl font-bold text-white">{num}</div>
-              <div className="text-xs text-white/70 mt-0.5 leading-tight">{label}</div>
-            </div>
-          ))}
+          {loading ? (
+            [0,1,2].map(i => <SkeletonStatCard key={i} />)
+          ) : (
+            [
+              { num: stats.trayek, label: 'Trayek Aktif', color: 'from-violet-600 to-indigo-600', icon: <IconBus size={24} className="text-white/90"/> },
+              { num: stats.jadwal, label: 'Jadwal/hari', color: 'from-blue-600 to-cyan-600', icon: <IconClock size={24} className="text-white/90"/> },
+              { num: stats.armada, label: 'Total Armada', color: 'from-emerald-600 to-teal-600', icon: <IconUsers size={24} className="text-white/90"/> },
+            ].map(({ num, label, color, icon }) => (
+              <div key={label} className={`bg-gradient-to-br ${color} rounded-2xl p-3 md:p-6 text-center`}>
+                <div className="flex justify-center mb-1">{icon}</div>
+                <div className="text-xl md:text-4xl font-bold text-white">{num}</div>
+                <div className="text-xs text-white/70 mt-0.5 leading-tight">{label}</div>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Fitur — horizontal card di mobile */}

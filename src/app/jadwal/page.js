@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import BottomNav from '@/components/BottomNav';
+import { SkeletonJadwalCard } from '@/components/Skeleton';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -84,7 +85,7 @@ export default function Jadwal() {
           ))}
         </div>
 
-        {loading && <div className="text-center py-12 text-gray-500 text-sm">Memuat jadwal...</div>}
+        {loading && <div className="flex flex-col gap-4">{[0,1,2].map(i => <SkeletonJadwalCard key={i} />)}</div>}
 
         {!loading && Object.values(grouped).map(({ info, jadwal: jadwalList }) => (
           <div key={info?.kode_trayek} className="bg-white/5 border border-white/10 rounded-2xl mb-4 overflow-hidden">

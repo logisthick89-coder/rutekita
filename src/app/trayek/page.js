@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import BottomNav from '@/components/BottomNav';
+import { SkeletonTrayekCard } from '@/components/Skeleton';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -105,7 +106,7 @@ export default function Trayek() {
                 </button>
               ))}
             </div>
-            {loading && <div className="text-center py-12 text-gray-500 text-sm">Memuat data trayek...</div>}
+            {loading && <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{[0,1,2,3].map(i => <SkeletonTrayekCard key={i} />)}</div>}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filtered.map(d => (
                 <div key={d.id} onClick={() => pilihTrayek(d)}
