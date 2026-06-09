@@ -8,6 +8,58 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
+// SVG Icons
+const IconBus = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M8 6v6M15 6v6M2 12h19.6M18 18h2a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h2"/><path d="M7 18h10"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M3 6h18a1 1 0 0 1 1 1v5H2V7a1 1 0 0 1 1-1z"/>
+  </svg>
+);
+const IconClock = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+  </svg>
+);
+const IconUsers = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </svg>
+);
+const IconMap = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>
+  </svg>
+);
+const IconMoney = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+  </svg>
+);
+const IconSearch = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+);
+const IconHome = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+  </svg>
+);
+const IconCalendar = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>
+);
+const IconChat = ({ size = 20, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+);
+const IconRobot = ({ size = 36, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/><path d="M8 15h.01M16 15h.01"/>
+  </svg>
+);
+
 export default function Home() {
   const [stats, setStats] = useState({ trayek: 0, jadwal: 0, armada: 0 });
 
@@ -46,48 +98,51 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <Link href="/cari" className="hidden md:block px-4 py-1.5 rounded-full text-sm font-semibold text-white"
+        <Link href="/cari" className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold text-white"
           style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
-          Cari Trayek
+          <IconSearch size={14}/> Cari Trayek
         </Link>
-        <Link href="/cari" className="md:hidden px-3 py-1.5 rounded-full text-xs font-semibold text-white"
+        <Link href="/cari" className="md:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white"
           style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
-          Cari
+          <IconSearch size={13}/> Cari
         </Link>
       </nav>
 
       {/* HERO */}
-      <section className="px-6 pt-12 pb-8 md:pt-20 md:pb-16 max-w-5xl mx-auto">
+      <section className="px-6 pt-10 pb-6 md:pt-20 md:pb-16 max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:gap-16">
-          <div className="flex-1 mb-10 md:mb-0">
-            <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-3 py-1 mb-5">
+          <div className="flex-1 mb-6 md:mb-0">
+            <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-3 py-1 mb-4">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
               <span className="text-xs text-violet-300 font-medium">Data resmi Dishub Garut</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-3">
               Naik angkot di Garut<br/>
               <span className="bg-clip-text text-transparent" style={{backgroundImage: 'linear-gradient(90deg, #a78bfa, #60a5fa, #34d399)'}}>
                 jadi lebih mudah
               </span>
             </h1>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-8 max-w-md">
+            <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6 max-w-md">
               Temukan trayek, jadwal keberangkatan, tarif, dan rute angkutan umum Kabupaten Garut — semua dalam satu tempat.
             </p>
-            <div className="flex gap-3 flex-wrap">
+
+            {/* CTA — full width di mobile */}
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/cari"
-                className="px-6 py-3 rounded-xl text-sm font-semibold text-white flex items-center gap-2 transition-all hover:opacity-90"
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 w-full sm:w-auto"
                 style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
-                🔍 Cari Trayek
+                <IconSearch size={16}/> Cari Trayek
               </Link>
               <Link href="/peta"
-                className="px-6 py-3 rounded-xl text-sm font-semibold text-gray-300 border border-white/10 hover:bg-white/10 transition-all flex items-center gap-2">
-                🗺️ Lihat Peta
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-gray-300 border border-white/10 hover:bg-white/10 transition-all w-full sm:w-auto">
+                <IconMap size={16}/> Lihat Peta
               </Link>
             </div>
           </div>
 
+          {/* Ilustrasi — lebih kecil di mobile */}
           <div className="flex-1 flex justify-center">
-            <div className="relative w-full max-w-xs md:max-w-sm">
+            <div className="relative w-full max-w-[240px] md:max-w-sm">
               <div className="absolute inset-0 rounded-3xl opacity-20"
                 style={{background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)'}}></div>
               <svg viewBox="0 0 320 220" className="w-full" xmlns="http://www.w3.org/2000/svg">
@@ -140,65 +195,86 @@ export default function Home() {
       </section>
 
       {/* STATISTIK */}
-      <section className="px-6 pb-12 max-w-5xl mx-auto">
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 mb-12">
+      <section className="px-6 pb-10 max-w-5xl mx-auto">
+        <div className="grid grid-cols-3 gap-3 md:gap-4 mb-10">
           {[
-            { num: stats.trayek, label: 'Trayek Aktif', color: 'from-violet-600 to-indigo-600', icon: '🚌' },
-            { num: stats.jadwal, label: 'Jadwal/hari', color: 'from-blue-600 to-cyan-600', icon: '⏰' },
-            { num: stats.armada, label: 'Total Armada', color: 'from-emerald-600 to-teal-600', icon: '🚏' },
+            { num: stats.trayek, label: 'Trayek Aktif', color: 'from-violet-600 to-indigo-600', icon: <IconBus size={24} className="text-white/90"/> },
+            { num: stats.jadwal, label: 'Jadwal/hari', color: 'from-blue-600 to-cyan-600', icon: <IconClock size={24} className="text-white/90"/> },
+            { num: stats.armada, label: 'Total Armada', color: 'from-emerald-600 to-teal-600', icon: <IconUsers size={24} className="text-white/90"/> },
           ].map(({ num, label, color, icon }) => (
-            <div key={label} className={`bg-gradient-to-br ${color} rounded-2xl p-4 md:p-6 text-center`}>
-              <div className="text-2xl md:text-3xl mb-1">{icon}</div>
-              <div className="text-2xl md:text-4xl font-bold text-white">{num}</div>
-              <div className="text-xs md:text-sm text-white/70 mt-1">{label}</div>
+            <div key={label} className={`bg-gradient-to-br ${color} rounded-2xl p-3 md:p-6 text-center`}>
+              <div className="flex justify-center mb-1">{icon}</div>
+              <div className="text-xl md:text-4xl font-bold text-white">{num}</div>
+              <div className="text-xs text-white/70 mt-0.5 leading-tight">{label}</div>
             </div>
           ))}
         </div>
 
-        <h2 className="text-white font-bold text-xl md:text-2xl mb-5 text-center">Semua yang kamu butuhkan</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
+        {/* Fitur — horizontal card di mobile */}
+        <h2 className="text-white font-bold text-xl md:text-2xl mb-4 text-center">Semua yang kamu butuhkan</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
           {[
-            { icon: '🚌', title: 'Trayek', desc: '6 rute tersedia', href: '/trayek', color: 'border-violet-500/30 hover:border-violet-500' },
-            { icon: '⏰', title: 'Jadwal', desc: 'Jam keberangkatan', href: '/jadwal', color: 'border-blue-500/30 hover:border-blue-500' },
-            { icon: '💰', title: 'Tarif', desc: 'Harga per segmen', href: '/tarif', color: 'border-emerald-500/30 hover:border-emerald-500' },
-            { icon: '🗺️', title: 'Peta', desc: 'Rute interaktif', href: '/peta', color: 'border-orange-500/30 hover:border-orange-500' },
-          ].map(({ icon, title, desc, href, color }) => (
+            { icon: <IconBus size={22}/>, title: 'Trayek', desc: '6 rute tersedia', href: '/trayek', accent: 'hover:border-violet-500', iconBg: 'bg-violet-500/10 text-violet-400' },
+            { icon: <IconClock size={22}/>, title: 'Jadwal', desc: 'Jam keberangkatan', href: '/jadwal', accent: 'hover:border-blue-500', iconBg: 'bg-blue-500/10 text-blue-400' },
+            { icon: <IconMoney size={22}/>, title: 'Tarif', desc: 'Harga per segmen', href: '/tarif', accent: 'hover:border-emerald-500', iconBg: 'bg-emerald-500/10 text-emerald-400' },
+            { icon: <IconMap size={22}/>, title: 'Peta', desc: 'Rute interaktif', href: '/peta', accent: 'hover:border-orange-500', iconBg: 'bg-orange-500/10 text-orange-400' },
+          ].map(({ icon, title, desc, href, accent, iconBg }) => (
             <Link key={title} href={href}
-              className={`bg-white/5 border ${color} rounded-2xl p-4 text-center transition-all hover:bg-white/10 group`}>
-              <div className="text-3xl mb-2">{icon}</div>
+              className={`bg-white/5 border border-white/10 ${accent} rounded-2xl p-4 flex flex-col items-center text-center transition-all hover:bg-white/10`}>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 ${iconBg}`}>
+                {icon}
+              </div>
               <div className="text-white font-semibold text-sm">{title}</div>
-              <div className="text-gray-400 text-xs mt-1">{desc}</div>
+              <div className="text-gray-400 text-xs mt-0.5">{desc}</div>
             </Link>
           ))}
         </div>
 
-        <div className="rounded-2xl p-6 md:p-8 text-center border border-orange-500/20"
+        {/* Chatbot CTA */}
+        <div className="rounded-2xl p-6 md:p-8 border border-white/10"
           style={{background: 'linear-gradient(135deg, #1a1a2e, #1e1b4b)'}}>
-          <div className="text-4xl mb-3">🤖</div>
-          <h3 className="text-white font-bold text-lg mb-2">Punya pertanyaan?</h3>
-          <p className="text-gray-400 text-sm mb-4">Tanya langsung ke asisten AI RuteKita — siap bantu 24 jam</p>
-          <button className="px-6 py-3 rounded-xl text-sm font-semibold text-white inline-flex items-center gap-2"
-            style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
-            💬 Mulai Chat
-          </button>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
+                <IconRobot size={24} className="text-white"/>
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-base">Punya pertanyaan?</h3>
+                <p className="text-gray-400 text-sm">Tanya asisten AI RuteKita — siap bantu 24 jam</p>
+              </div>
+            </div>
+            <button className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white flex-shrink-0"
+              style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
+              <IconChat size={16}/> Mulai Chat
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* BOTTOM NAV */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#0f0f1a]/95 border-t border-white/10 flex h-14 z-40">
-        {[['/', '🏠', 'Beranda'], ['/trayek', '🚌', 'Trayek'], ['/peta', '🗺️', 'Peta'], ['/jadwal', '📅', 'Jadwal']].map(([href, icon, label]) => (
+      {/* BOTTOM NAV mobile */}
+      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#0f0f1a]/95 backdrop-blur border-t border-white/10 flex h-16 z-40">
+        {[
+          { href: '/', icon: <IconHome size={20}/>, label: 'Beranda', active: true },
+          { href: '/trayek', icon: <IconBus size={20}/>, label: 'Trayek', active: false },
+          { href: '/peta', icon: <IconMap size={20}/>, label: 'Peta', active: false },
+          { href: '/jadwal', icon: <IconCalendar size={20}/>, label: 'Jadwal', active: false },
+        ].map(({ href, icon, label, active }) => (
           <Link key={label} href={href}
-            className={`flex-1 flex flex-col items-center justify-center gap-0.5 text-xs transition-all
-            ${label === 'Beranda' ? 'text-violet-400' : 'text-gray-500 hover:text-white'}`}>
-            <span className="text-lg">{icon}</span>{label}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 text-xs transition-all
+            ${active ? 'text-violet-400' : 'text-gray-500 hover:text-white'}`}>
+            {icon}
+            <span>{label}</span>
           </Link>
         ))}
       </div>
 
-      <button className="fixed bottom-16 right-4 md:bottom-6 md:right-6 w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-50 text-xl"
+      {/* Chatbot FAB — hanya di desktop, atau mobile tapi tidak menimpa nav */}
+      <button className="fixed bottom-20 right-4 md:bottom-6 md:right-6 w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-50"
         style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
-        💬
+        <IconChat size={20} className="text-white"/>
       </button>
+
     </main>
   );
 }
