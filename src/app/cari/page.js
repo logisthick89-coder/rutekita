@@ -2,6 +2,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
+import BottomNav from '@/components/BottomNav';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 const supabase = createClient(
@@ -281,14 +282,7 @@ function CariContent() {
         )}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#0f0f1a]/95 border-t border-white/10 flex h-14 z-40">
-        {[['/', '🏠', 'Beranda'], ['/trayek', '🚌', 'Trayek'], ['/peta', '🗺️', 'Peta'], ['/jadwal', '📅', 'Jadwal']].map(([href, icon, label]) => (
-          <Link key={label} href={href}
-            className="flex-1 flex flex-col items-center justify-center gap-0.5 text-xs text-gray-500 hover:text-white transition-all">
-            <span className="text-lg">{icon}</span>{label}
-          </Link>
-        ))}
-      </div>
+      <BottomNav />
     </main>
   );
 }
