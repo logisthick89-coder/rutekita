@@ -110,10 +110,11 @@ export default function ChatBot() {
   return (
     <>
       {/* FAB Button */}
+      {/* FAB — tersembunyi di mobile (ada bottom nav), tampil di desktop */}
       <button
         onClick={() => setOpen(!open)}
         aria-label="Buka asisten RuteKita"
-        className="fixed z-50 transition-all duration-200 hover:scale-105 active:scale-95"
+        className="hidden md:flex fixed z-50 transition-all duration-200 hover:scale-105 active:scale-95 items-center justify-center"
         style={{
           bottom: '24px',
           right: '24px',
@@ -123,9 +124,6 @@ export default function ChatBot() {
           background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
           border: '1px solid rgba(255,255,255,0.15)',
           boxShadow: '0 4px 20px rgba(99,102,241,0.35)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           color: 'white',
         }}>
         {open ? <IconClose /> : <IconChat />}
@@ -137,7 +135,7 @@ export default function ChatBot() {
           className="fixed z-50 rounded-2xl border border-white/10 flex flex-col overflow-hidden"
           style={{
             background: '#13131f',
-            width: 'min(360px, calc(100vw - 16px))',
+            width: 'min(360px, calc(100vw - 32px))',
             maxHeight: '520px',
             boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
             bottom: '80px',

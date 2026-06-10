@@ -155,24 +155,11 @@ export default function Home() {
         </div>
 
         <h2 className="text-white font-bold text-xl md:text-2xl mb-4 text-center">Semua yang kamu butuhkan</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-10">
           {[
             { icon: <IconBus size={22}/>, title: 'Trayek', desc: '6 rute tersedia', href: '/trayek', accent: 'hover:border-violet-500', iconBg: 'bg-violet-500/10 text-violet-400' },
             { icon: <IconClock size={22}/>, title: 'Jadwal', desc: 'Jam keberangkatan', href: '/jadwal', accent: 'hover:border-blue-500', iconBg: 'bg-blue-500/10 text-blue-400' },
             { icon: <IconMoney size={22}/>, title: 'Tarif', desc: 'Harga per segmen', href: '/tarif', accent: 'hover:border-emerald-500', iconBg: 'bg-emerald-500/10 text-emerald-400' },
-          ].map(({ icon, title, desc, href, accent, iconBg }) => (
-            <Link key={title} href={href}
-              className={`bg-white/5 border border-white/10 ${accent} rounded-2xl p-4 flex flex-col items-center text-center transition-all hover:bg-white/10`}>
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 ${iconBg}`}>
-                {icon}
-              </div>
-              <div className="text-white font-semibold text-sm">{title}</div>
-              <div className="text-gray-400 text-xs mt-0.5">{desc}</div>
-            </Link>
-          ))}
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-10">
-          {[
             { icon: <IconMap size={22}/>, title: 'Peta', desc: 'Rute interaktif', href: '/peta', accent: 'hover:border-orange-500', iconBg: 'bg-orange-500/10 text-orange-400' },
             { icon: <IconSearch size={22}/>, title: 'Cari Trayek', desc: 'Cari dari → ke', href: '/cari', accent: 'hover:border-violet-500', iconBg: 'bg-violet-500/10 text-violet-400' },
             { icon: <IconBriefcase size={22}/>, title: 'Bisnis', desc: 'Info usaha angkot', href: '/bisnis', accent: 'hover:border-amber-500', iconBg: 'bg-amber-500/10 text-amber-400' },
