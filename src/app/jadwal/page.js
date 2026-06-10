@@ -53,10 +53,10 @@ export default function Jadwal() {
           <span className="text-white">Rute<span className="text-violet-400">Kita</span></span>
         </Link>
         <div className="hidden md:flex gap-1">
-          {[['/', 'Beranda'], ['/trayek', 'Trayek'], ['/jadwal', 'Jadwal'], ['/tarif', 'Tarif'], ['/peta', 'Peta']].map(([href, label]) => (
+          {[['/', 'Beranda'], ['/trayek', 'Trayek'], ['/jadwal', 'Jadwal'], ['/tarif', 'Tarif'], ['/peta', 'Peta'], ['/bisnis', 'Bisnis']].map(([href, label]) => (
             <Link key={label} href={href}
               className={`px-3 py-1.5 rounded-full text-sm transition-all
-              ${label === 'Jadwal' ? 'bg-violet-500/20 text-violet-300 font-semibold' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}>
+              ${label === 'Jadwal' ? 'bg-violet-500/20 text-violet-300 font-semibold' : label === 'Bisnis' ? 'text-amber-400 hover:text-white hover:bg-white/10' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}>
               {label}
             </Link>
           ))}
