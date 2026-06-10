@@ -21,6 +21,11 @@ const IconChat = ({ size = 20, className = '' }) => (<svg width={size} height={s
 const IconBriefcase = ({ size = 20, className = '' }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12"/><line x1="12" y1="12" x2="12.01" y2="12"/></svg>);
 const IconRobot = ({ size = 36, className = '' }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><path d="M8 15h.01M16 15h.01"/></svg>);
 
+// Event untuk trigger chatbot dari luar
+function openChatBot() {
+  window.dispatchEvent(new CustomEvent('rutekita:openchat'));
+}
+
 export default function Home() {
   const [stats, setStats] = useState({ trayek: 0, jadwal: 0, armada: 0 });
   const [loading, setLoading] = useState(true);
@@ -189,7 +194,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-                style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
+                style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
                 <IconRobot size={24} className="text-white"/>
               </div>
               <div>
@@ -197,8 +202,8 @@ export default function Home() {
                 <p className="text-gray-400 text-sm">Tanya asisten AI RuteKita — siap bantu 24 jam</p>
               </div>
             </div>
-            <button className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white flex-shrink-0"
-              style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
+            <button onClick={openChatBot} className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white flex-shrink-0 transition-all hover:opacity-90"
+              style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
               <IconChat size={16}/> Mulai Chat
             </button>
           </div>
@@ -222,10 +227,6 @@ export default function Home() {
         ))}
       </div>
 
-      <button className="hidden md:flex fixed bottom-6 right-6 w-12 h-12 rounded-full items-center justify-center shadow-lg z-50"
-        style={{background: 'linear-gradient(135deg, #f59e0b, #ef4444)'}}>
-        <IconChat size={20} className="text-white"/>
-      </button>
 
     </main>
   );
