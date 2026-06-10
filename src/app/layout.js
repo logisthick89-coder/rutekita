@@ -38,13 +38,8 @@ export const metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
+    googleBot: { index: true, follow: true },
   },
-
-  // Open Graph — untuk WhatsApp, Facebook, dll
   openGraph: {
     type: "website",
     locale: "id_ID",
@@ -53,29 +48,15 @@ export const metadata = {
     title: "RuteKita — Angkutan Umum Kabupaten Garut",
     description:
       "Temukan trayek, jadwal, tarif, dan peta rute angkutan umum Kabupaten Garut dalam satu tempat. Data resmi Dishub Garut.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "RuteKita — Angkutan Umum Kabupaten Garut",
-      },
-    ],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RuteKita — Angkutan Umum Kabupaten Garut" }],
   },
-
-  // Twitter Card
   twitter: {
     card: "summary_large_image",
     title: "RuteKita — Angkutan Umum Kabupaten Garut",
-    description:
-      "Temukan trayek, jadwal, tarif, dan peta rute angkutan umum Kabupaten Garut dalam satu tempat.",
+    description: "Temukan trayek, jadwal, tarif, dan peta rute angkutan umum Kabupaten Garut dalam satu tempat.",
     images: ["/og-image.png"],
   },
-
-  // Canonical URL
-  alternates: {
-    canonical: BASE_URL,
-  },
+  alternates: { canonical: BASE_URL },
 };
 
 export default function RootLayout({ children }) {
