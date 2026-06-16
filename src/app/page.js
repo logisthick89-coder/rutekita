@@ -21,9 +21,44 @@ const IconChat = ({ size = 20, className = '' }) => (<svg width={size} height={s
 const IconBriefcase = ({ size = 20, className = '' }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12"/><line x1="12" y1="12" x2="12.01" y2="12"/></svg>);
 const IconRobot = ({ size = 36, className = '' }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><path d="M8 15h.01M16 15h.01"/></svg>);
 
-// Event untuk trigger chatbot dari luar
 function openChatBot() {
   window.dispatchEvent(new CustomEvent('rutekita:openchat'));
+}
+
+function MarqueeTitle() {
+  const texts = [
+    '🚌 Naik angkot di Garut jadi lebih mudah',
+    '📍 Temukan rute angkutan umum Kabupaten Garut',
+    '⏰ Cek jadwal & tarif angkot real-time',
+    '🗺️ Lihat peta rute interaktif seluruh trayek',
+    '💼 Informasi bisnis & investasi angkutan umum',
+  ];
+  const repeated = [...texts, ...texts, ...texts, ...texts];
+
+  return (
+    <div className="overflow-hidden w-full" style={{maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'}}>
+      <div style={{
+        display: 'flex',
+        width: 'max-content',
+        animation: 'marquee-smooth 30s linear infinite',
+        willChange: 'transform',
+      }}>
+        {repeated.map((text, i) => (
+          <span key={i}
+            className="text-base md:text-xl font-bold mx-8 bg-clip-text text-transparent flex-shrink-0"
+            style={{backgroundImage: 'linear-gradient(90deg, #a78bfa, #60a5fa, #34d399)'}}>
+            {text}
+          </span>
+        ))}
+      </div>
+      <style>{`
+        @keyframes marquee-smooth {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-25%); }
+        }
+      `}</style>
+    </div>
+  );
 }
 
 export default function Home() {
@@ -78,8 +113,13 @@ export default function Home() {
         </Link>
       </nav>
 
+      {/* MARQUEE TITLE */}
+      <div className="py-4 md:py-6 border-b border-white/5 overflow-hidden">
+        <MarqueeTitle />
+      </div>
+
       {/* HERO */}
-      <section className="px-6 pt-10 pb-6 md:pt-20 md:pb-16 max-w-5xl mx-auto">
+      <section className="px-6 pt-8 pb-6 md:pt-14 md:pb-16 max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:gap-16">
           <div className="flex-1 mb-6 md:mb-0">
             <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-3 py-1 mb-4">
@@ -88,7 +128,8 @@ export default function Home() {
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-3">
               Naik angkot di Garut<br/>
-              <span className="bg-clip-text text-transparent" style={{backgroundImage: 'linear-gradient(90deg, #a78bfa, #60a5fa, #34d399)'}}>
+              <span className="bg-clip-text text-transparent"
+                style={{backgroundImage: 'linear-gradient(90deg, #a78bfa, #60a5fa, #34d399)'}}>
                 jadi lebih mudah
               </span>
             </h1>
@@ -109,7 +150,9 @@ export default function Home() {
           </div>
           <div className="flex-1 flex justify-center">
             <div className="relative w-full max-w-[200px] md:max-w-sm">
-              <img src="/selamat-datang.jpeg" alt="Kota Garut" className="w-full rounded-3xl object-cover" style={{maxHeight:"300px"}} />
+              <img src="/selamat-datang.jpeg" alt="Kota Garut"
+                className="w-full rounded-3xl object-cover shadow-2xl"
+                style={{maxHeight: '300px'}} />
             </div>
           </div>
         </div>
@@ -170,7 +213,8 @@ export default function Home() {
                 <p className="text-gray-400 text-sm">Tanya asisten AI RuteKita — siap bantu 24 jam</p>
               </div>
             </div>
-            <button onClick={openChatBot} className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white flex-shrink-0 transition-all hover:opacity-90"
+            <button onClick={openChatBot}
+              className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white flex-shrink-0 transition-all hover:opacity-90"
               style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
               <IconChat size={16}/> Mulai Chat
             </button>
@@ -195,10 +239,7 @@ export default function Home() {
         ))}
       </div>
 
-
     </main>
   );
 }
-
-
 
