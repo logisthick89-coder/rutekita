@@ -10,11 +10,11 @@ const supabase = createClient(
 );
 
 const WARNA_TRAYEK = {
-  '01': '#8b5cf6',
-  '02': '#3b82f6',
+  '01': '#a855f7',
+  '02': '#06b6d4',
   '03': '#ef4444',
-  '04': '#f59e0b',
-  '05': '#10b981',
+  '04': '#eab308',
+  '05': '#22c55e',
   '06': '#6b7280',
 };
 
@@ -41,7 +41,6 @@ export default function Peta() {
     fetchData();
   }, []);
 
-  // Init peta sekali saja
   useEffect(() => {
     if (loading || !mapRef.current) return;
     async function initMap() {
@@ -61,19 +60,28 @@ export default function Peta() {
 
       polylinesRef.current = {};
 
-      trayek.forEach(t => {
+      for (const t of trayek) {
         const halteWithCoord = (t.halte || []).filter(h => h.lat && h.lng).sort((a, b) => a.urutan - b.urutan);
-        if (halteWithCoord.length === 0) return;
+        if (halteWithCoord.length === 0) continue;
         const warna = WARNA_TRAYEK[t.kode_trayek] || '#8b5cf6';
-        const coords = halteWithCoord.map(h => [h.lat, h.lng]);
 
-        // Polyline shadow (glow)
+        let coords = halteWithCoord.map(h => [h.lat, h.lng]);
+        try {
+          const waypoints = halteWithCoord.map(h => `${h.lng},${h.lat}`).join(';');
+          const osrmRes = await fetch(`https://router.project-osrm.org/route/v1/driving/${waypoints}?overview=full&geometries=geojson`);
+          const osrmData = await osrmRes.json();
+          if (osrmData.code === 'Ok' && osrmData.routes[0]) {
+            coords = osrmData.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+          }
+        } catch(e) {
+          console.warn('OSRM gagal, pakai garis lurus:', e);
+        }
+
         const shadow = L.polyline(coords, { color: warna, weight: 10, opacity: 0.15 }).addTo(map);
         const line = L.polyline(coords, { color: warna, weight: 4, opacity: 0.9 }).addTo(map);
 
         polylinesRef.current[t.kode_trayek] = { line, shadow };
 
-        // Klik polyline → tampilkan panel info
         line.on('click', () => {
           setSelectedTrayek(t.kode_trayek);
           setActiveInfo(t);
@@ -100,7 +108,7 @@ export default function Peta() {
             </div>
           `);
         });
-      });
+      }
     }
     initMap();
     return () => {
@@ -108,7 +116,6 @@ export default function Peta() {
     };
   }, [loading, trayek]);
 
-  // Highlight efek saat selectedTrayek berubah
   useEffect(() => {
     const polylines = polylinesRef.current;
     if (!polylines || Object.keys(polylines).length === 0) return;
@@ -126,7 +133,6 @@ export default function Peta() {
       }
     });
 
-    // Update panel info
     if (selectedTrayek === 'semua') {
       setActiveInfo(null);
     } else {
@@ -139,7 +145,6 @@ export default function Peta() {
 
   return (
     <main className="min-h-screen bg-[#0f0f1a] font-sans">
-      {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-[#0f0f1a]/90 backdrop-blur border-b border-white/10 px-6 h-14 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
@@ -157,7 +162,6 @@ export default function Peta() {
         </div>
       </nav>
 
-      {/* Filter trayek */}
       <div className="bg-[#0f0f1a]/95 border-b border-white/10 px-4 py-3 z-40 relative">
         <div className="flex gap-2 overflow-x-auto max-w-4xl mx-auto">
           <button onClick={() => setSelectedTrayek('semua')}
@@ -184,12 +188,9 @@ export default function Peta() {
         <div style={{ position: 'relative' }}>
           <div ref={mapRef} style={{ height: 'calc(100vh - 112px)', width: '100%', zIndex: 0 }} />
 
-          {/* Panel info trayek — muncul saat trayek dipilih */}
           {activeInfo && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md"
               style={{ background: '#16162a', border: `1px solid ${warna}44`, borderRadius: '16px', padding: '14px 16px' }}>
-
-              {/* Header: info kiri, status + close kanan */}
               <div className="flex items-start justify-between mb-2">
                 <div style={{ flex: 1, minWidth: 0, paddingRight: '8px' }}>
                   <div className="text-xs font-bold mb-0.5" style={{ color: warna }}>
@@ -216,8 +217,6 @@ export default function Peta() {
                     }}>✕</button>
                 </div>
               </div>
-
-              {/* Stats */}
               <div className="grid grid-cols-3 gap-2 mt-3">
                 {activeInfo.jumlah_armada != null && (
                   <div className="rounded-xl px-3 py-2 text-center" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
@@ -241,8 +240,6 @@ export default function Peta() {
                   </div>
                 )}
               </div>
-
-              {/* Jam operasi */}
               {activeInfo.jam_operasi && (
                 <div className="mt-2 text-xs text-gray-500 text-center">
                   🕐 Operasi: <span className="text-gray-300">{activeInfo.jam_operasi}</span>
@@ -254,7 +251,6 @@ export default function Peta() {
         </div>
       )}
 
-      {/* Legenda */}
       {!loading && (
         <div className="fixed bottom-16 md:bottom-6 right-4 rounded-2xl border border-white/10 p-3 z-40"
           style={{ background: '#16162a' }}>
@@ -282,3 +278,4 @@ export default function Peta() {
     </main>
   );
 }
+
