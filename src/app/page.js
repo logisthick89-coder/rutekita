@@ -109,26 +109,7 @@ export default function Home() {
           </div>
           <div className="flex-1 flex justify-center">
             <div className="relative w-full max-w-[200px] md:max-w-sm">
-              <div className="absolute inset-0 rounded-3xl opacity-20"
-                style={{background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)'}}></div>
-              <svg viewBox="0 0 320 220" className="w-full" xmlns="http://www.w3.org/2000/svg">
-                <rect width="320" height="220" rx="24" fill="#1a1a2e"/>
-                <circle cx="40" cy="30" r="1.5" fill="#fff" opacity="0.6"/><circle cx="80" cy="20" r="1" fill="#fff" opacity="0.4"/><circle cx="130" cy="35" r="1.5" fill="#fff" opacity="0.5"/><circle cx="200" cy="25" r="1" fill="#fff" opacity="0.6"/><circle cx="260" cy="40" r="1.5" fill="#fff" opacity="0.4"/><circle cx="290" cy="20" r="1" fill="#fff" opacity="0.5"/>
-                <polygon points="30,140 90,60 150,140" fill="#1e3a5f" opacity="0.8"/><polygon points="80,140 150,70 220,140" fill="#1a3a4f" opacity="0.9"/><polygon points="160,140 230,75 300,140" fill="#1e3a5f" opacity="0.7"/>
-                <rect y="155" width="320" height="40" fill="#1f2937"/><rect y="172" width="320" height="3" fill="#374151"/>
-                <rect x="10" y="173" width="30" height="2" rx="1" fill="#facc15" opacity="0.8"/><rect x="60" y="173" width="30" height="2" rx="1" fill="#facc15" opacity="0.8"/><rect x="110" y="173" width="30" height="2" rx="1" fill="#facc15" opacity="0.8"/><rect x="160" y="173" width="30" height="2" rx="1" fill="#facc15" opacity="0.8"/><rect x="210" y="173" width="30" height="2" rx="1" fill="#facc15" opacity="0.8"/><rect x="260" y="173" width="30" height="2" rx="1" fill="#facc15" opacity="0.8"/>
-                <rect x="30" y="118" width="100" height="45" rx="8" fill="#4f46e5"/><rect x="30" y="118" width="100" height="16" rx="8" fill="#6366f1"/><rect x="38" y="124" width="70" height="8" rx="3" fill="#93c5fd" opacity="0.8"/>
-                <circle cx="50" cy="165" r="9" fill="#1f2937"/><circle cx="50" cy="165" r="5" fill="#374151"/><circle cx="110" cy="165" r="9" fill="#1f2937"/><circle cx="110" cy="165" r="5" fill="#374151"/>
-                <rect x="125" y="130" width="8" height="20" rx="2" fill="#facc15" opacity="0.9"/>
-                <text x="80" y="147" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" opacity="0.9">GARUT KOTA</text>
-                <rect x="185" y="122" width="90" height="40" rx="8" fill="#059669"/><rect x="185" y="122" width="90" height="14" rx="8" fill="#10b981"/><rect x="192" y="127" width="60" height="7" rx="2" fill="#6ee7b7" opacity="0.8"/>
-                <circle cx="200" cy="164" r="8" fill="#1f2937"/><circle cx="200" cy="164" r="4" fill="#374151"/><circle cx="255" cy="164" r="8" fill="#1f2937"/><circle cx="255" cy="164" r="4" fill="#374151"/>
-                <rect x="270" y="132" width="7" height="18" rx="2" fill="#facc15" opacity="0.9"/>
-                <text x="230" y="145" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold" opacity="0.9">TAROGONG</text>
-                <rect x="155" y="130" width="5" height="25" fill="#713f12"/><circle cx="157" cy="122" r="15" fill="#166534" opacity="0.9"/><circle cx="148" cy="128" r="10" fill="#15803d" opacity="0.8"/><circle cx="166" cy="128" r="10" fill="#15803d" opacity="0.8"/>
-                <rect x="100" y="10" width="120" height="24" rx="12" fill="#4f46e5" opacity="0.3"/>
-                <text x="160" y="26" textAnchor="middle" fill="#a78bfa" fontSize="10" fontWeight="600">Kabupaten Garut</text>
-              </svg>
+              <img src="/selamat-datang.jpeg" alt="Kota Garut" className="w-full rounded-3xl object-cover" style={{maxHeight:"300px"}} />
             </div>
           </div>
         </div>
@@ -218,3 +199,6 @@ export default function Home() {
     </main>
   );
 }
+
+
+

@@ -59,3 +59,17 @@ a:focus-visible, button:focus-visible {
   outline-offset: 2px;
   border-radius: 6px;
 }
+
+/* ===== BOTTOM NAV SPACING ===== */
+@media (max-width: 768px) {
+  main, .page-content {
+    padding-bottom: 80px;
+  }
+}
+
+/* ===== BOTTOM NAV SPACING ===== */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 4rem;
+  }
+}

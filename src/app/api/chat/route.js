@@ -45,7 +45,7 @@ export async function POST(request) {
           contents: geminiMessages,
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 500,
+            maxOutputTokens: 2048,
           },
         }),
       }
@@ -72,3 +72,5 @@ export async function POST(request) {
     );
   }
 }
+
+
