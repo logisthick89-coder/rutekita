@@ -18,6 +18,15 @@ const JENIS_COLOR = {
   pedesaan: 'from-emerald-600 to-teal-600'
 };
 
+const TRAYEK_IMG = {
+  '01': '/tarogong.jpg',
+  '02': '/cibatu.jpg',
+  '03': '/leles.jpg',
+  '04': '/wanaraja.jpg',
+  '05': '/kadungora.jpg',
+  '06': '/malangbong.jpg',
+};
+
 export default function Trayek() {
   const [filter, setFilter] = useState('semua');
   const [data, setData] = useState([]);
@@ -110,33 +119,53 @@ export default function Trayek() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filtered.map(d => (
                 <div key={d.id} onClick={() => pilihTrayek(d)}
-                  className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-violet-500/50 hover:bg-white/10 transition-all cursor-pointer group">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[d.jenis] || 'from-gray-600 to-gray-700'}`}>
-                      Trayek {d.kode_trayek}
-                    </span>
-                    <span className={`text-xs flex items-center gap-1 ${d.aktif ? 'text-emerald-400' : 'text-red-400'}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${d.aktif ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
-                      {d.aktif ? 'Aktif' : 'Nonaktif'}
-                    </span>
-                  </div>
-                  <div className="font-bold text-sm text-white mb-1">{d.nama_rute}</div>
-                  <div className="text-xs text-gray-500 mb-3">Via {d.via}</div>
-                  <div className="grid grid-cols-3 pt-3 border-t border-white/10 gap-2">
-                    <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-0.5">Jam</div>
-                      <div className="text-xs text-white font-medium">{d.jam_operasi}</div>
-                    </div>
-                    <div className="text-center border-x border-white/10">
-                      <div className="text-xs text-gray-500 mb-0.5">Armada</div>
-                      <div className="text-xs text-white font-medium">{d.jumlah_armada || '-'} unit</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xs text-gray-500 mb-0.5">Jarak</div>
-                      <div className="text-xs text-white font-medium">{d.jarak_km || '-'} km</div>
-                    </div>
-                  </div>
-                </div>
+  className="relative rounded-2xl overflow-hidden cursor-pointer group transition-all hover:scale-[1.02] hover:shadow-2xl"
+  style={{height: '200px'}}>
+  
+  {/* Foto background */}
+  <div className="absolute inset-0"
+    style={TRAYEK_IMG[d.kode_trayek] ? {
+      backgroundImage: `url(${TRAYEK_IMG[d.kode_trayek]})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    } : {background: '#1a1a2e'}} />
+  
+  {/* Gradient overlay dari bawah */}
+  <div className="absolute inset-0"
+    style={{background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.15) 100%)'}} />
+  
+  {/* Badge atas */}
+  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+    <span className={`text-xs font-bold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[d.jenis] || 'from-gray-600 to-gray-700'}`}>
+      Trayek {d.kode_trayek}
+    </span>
+    <span className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full backdrop-blur-sm
+      ${d.aktif ? 'text-emerald-300 bg-emerald-500/20' : 'text-red-300 bg-red-500/20'}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${d.aktif ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+      {d.aktif ? 'Aktif' : 'Nonaktif'}
+    </span>
+  </div>
+
+  {/* Konten bawah */}
+  <div className="absolute bottom-0 left-0 right-0 p-3">
+    <div className="font-bold text-sm text-white mb-0.5 drop-shadow">{d.nama_rute}</div>
+    <div className="text-xs text-gray-300 mb-2 drop-shadow">Via {d.via}</div>
+    <div className="grid grid-cols-3 gap-1 pt-2 border-t border-white/20">
+      <div className="text-center">
+        <div className="text-xs text-gray-400">Jam</div>
+        <div className="text-xs text-white font-semibold">{d.jam_operasi}</div>
+      </div>
+      <div className="text-center border-x border-white/20">
+        <div className="text-xs text-gray-400">Armada</div>
+        <div className="text-xs text-white font-semibold">{d.jumlah_armada || '-'} unit</div>
+      </div>
+      <div className="text-center">
+        <div className="text-xs text-gray-400">Jarak</div>
+        <div className="text-xs text-white font-semibold">{d.jarak_km || '-'} km</div>
+      </div>
+    </div>
+  </div>
+</div>
               ))}
             </div>
           </>
