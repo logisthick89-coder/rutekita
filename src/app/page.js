@@ -231,27 +231,9 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </section>
-
-      {/* BOTTOM NAV mobile */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#0f0f1a]/95 backdrop-blur border-t border-white/10 flex h-16 z-40">
-        {[
-          { href: '/', icon: <IconHome size={20}/>, label: 'Beranda', active: true },
-          { href: '/trayek', icon: <IconBus size={20}/>, label: 'Trayek', active: false },
-          { href: '/peta', icon: <IconMap size={20}/>, label: 'Peta', active: false },
-          { href: '/jadwal', icon: <IconCalendar size={20}/>, label: 'Jadwal', active: false },
-        ].map(({ href, icon, label, active }) => (
-          <Link key={label} href={href}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 text-xs transition-all
-            ${active ? 'text-violet-400' : 'text-gray-500 hover:text-white'}`}>
-            {icon}
-            <span>{label}</span>
-          </Link>
-        ))}
-      </div>
-
-    </main>
+      </section></main>
   );
 }
+
 
 
