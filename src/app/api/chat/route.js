@@ -17,10 +17,42 @@ Info bisnis: Modal Rp90-175 juta, pendapatan bersih Rp100-250 ribu/hari, break e
 
 Panduan: Jawab Bahasa Indonesia ramah, fokus transportasi Garut, singkat 3-4 kalimat, gunakan emoji.`;
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function callGemini(apiKey, geminiMessages, attempt = 1) {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: geminiMessages,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 2048,
+        },
+      }),
+    }
+  );
+
+  const data = await response.json();
+
+  // Kalau server Gemini overload (503) atau rate limit (429), retry
+  if ((response.status === 503 || response.status === 429) && attempt < 3) {
+    const delay = attempt * 2000; // percobaan 1: tunggu 2 detik, percobaan 2: tunggu 4 detik
+    console.log(`Gemini ${response.status}, retry ke-${attempt} setelah ${delay}ms...`);
+    await sleep(delay);
+    return callGemini(apiKey, geminiMessages, attempt + 1);
+  }
+
+  return { response, data };
+}
+
 export async function POST(request) {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    
+
     if (!apiKey) {
       console.error('GEMINI_API_KEY tidak ditemukan');
       return NextResponse.json({ reply: 'Konfigurasi API belum siap.' }, { status: 500 });
@@ -35,30 +67,16 @@ export async function POST(request) {
         parts: [{ text: m.content }],
       }));
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: geminiMessages,
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 2048,
-          },
-        }),
-      }
-    );
-
-    const data = await response.json();
+    const { response, data } = await callGemini(apiKey, geminiMessages);
 
     if (!response.ok) {
       console.error('Gemini error:', response.status, JSON.stringify(data));
-      return NextResponse.json(
-        { reply: `Error dari Gemini: ${data?.error?.message || response.status}` },
-        { status: 500 }
-      );
+      // Pesan error yang lebih ramah untuk pengguna
+      const isOverload = response.status === 503 || response.status === 429;
+      const friendlyMsg = isOverload
+        ? 'Asisten sedang sibuk, coba lagi dalam beberapa detik ya! 🙏'
+        : `Maaf, terjadi kendala teknis. Silakan coba lagi. 🙏`;
+      return NextResponse.json({ reply: friendlyMsg }, { status: 500 });
     }
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, tidak ada respons.';
@@ -67,10 +85,8 @@ export async function POST(request) {
   } catch (error) {
     console.error('Chat API error:', error.message);
     return NextResponse.json(
-      { reply: `Error: ${error.message}` },
+      { reply: 'Maaf, terjadi kendala koneksi. Silakan coba lagi. 🙏' },
       { status: 500 }
     );
   }
 }
-
-
