@@ -1,7 +1,6 @@
 ﻿import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ChatBot from "@/components/ChatBot";
-import BottomNav from "@/components/BottomNav";
 import Sidebar from "@/components/Sidebar";
 
 const geistSans = Geist({
@@ -44,13 +43,12 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="min-h-full flex bg-[#0f0f1a]">
+      <body className="min-h-full flex flex-col md:flex-row bg-[#0f0f1a]">
         <Sidebar />
         <div className="flex-1 min-w-0">
           {children}
         </div>
         <ChatBot />
-        <BottomNav />
       </body>
     </html>
   );

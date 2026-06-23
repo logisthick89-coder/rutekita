@@ -11,8 +11,8 @@ const IconMap = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="non
 const IconSearch = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>);
 const IconBriefcase = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>);
 const IconInfo = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>);
-const IconMenu = () => (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>);
-const IconClose = () => (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>);
+const IconMenu = () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>);
+const IconClose = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>);
 
 const NAV_ITEMS = [
   { href: '/', label: 'Beranda', icon: <IconHome /> },
@@ -25,17 +25,98 @@ const NAV_ITEMS = [
   { href: '/tentang', label: 'Tentang', icon: <IconInfo /> },
 ];
 
+function NavItems({ pathname, onClose }) {
+  return (
+    <nav className="flex-1 py-4 overflow-y-auto">
+      {NAV_ITEMS.map(({ href, label, icon, highlight }) => {
+        const active = pathname === href;
+        return (
+          <Link key={href} href={href} onClick={onClose}
+            className={`flex items-center gap-3 mx-2 mb-1 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+              ${active
+                ? 'bg-violet-500/20 text-violet-300'
+                : highlight
+                ? 'text-amber-400 hover:bg-white/10 hover:text-amber-300'
+                : 'text-gray-400 hover:bg-white/10 hover:text-white'
+              }`}>
+            <span className="flex-shrink-0">{icon}</span>
+            <span className="truncate">{label}</span>
+            {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0"></span>}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
   return (
     <>
+      {/* ===== MOBILE ===== */}
+
+      {/* Topbar mobile */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-4 border-b border-white/10"
+        style={{background: '#0d0d1a'}}>
+        <button onClick={() => setMobileOpen(true)}
+          className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+          <IconMenu />
+        </button>
+        <Link href="/" className="flex items-center gap-2 font-bold">
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+            style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>R</div>
+          <span className="text-white text-sm">Rute<span className="text-violet-400">Kita</span></span>
+        </Link>
+        <div className="w-8" />
+      </div>
+
+      {/* Spacer topbar mobile */}
+      <div className="md:hidden h-14 flex-shrink-0" />
+
+      {/* Overlay mobile */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)} />
+
+          {/* Drawer */}
+          <div className="relative w-64 h-full flex flex-col border-r border-white/10"
+            style={{background: '#0d0d1a'}}>
+            {/* Header drawer */}
+            <div className="flex items-center justify-between px-4 h-14 border-b border-white/10 flex-shrink-0">
+              <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 font-bold">
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+                  style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>R</div>
+                <span className="text-white text-sm">Rute<span className="text-violet-400">Kita</span></span>
+              </Link>
+              <button onClick={() => setMobileOpen(false)}
+                className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/10">
+                <IconClose />
+              </button>
+            </div>
+
+            {/* Menu drawer */}
+            <NavItems pathname={pathname} onClose={() => setMobileOpen(false)} />
+
+            {/* Footer drawer */}
+            <div className="px-4 pb-4 border-t border-white/10 pt-3">
+              <div className="text-xs text-gray-600 text-center">RuteKita v1.0</div>
+              <div className="text-xs text-gray-700 text-center">Dishub Garut</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== DESKTOP ===== */}
       <aside
         className="hidden md:flex flex-col fixed left-0 top-0 h-screen z-50 border-r border-white/10 transition-all duration-300"
         style={{ width: open ? '220px' : '64px', background: '#0d0d1a' }}>
 
-        {/* HEADER */}
+        {/* Header desktop */}
         <div className="flex items-center h-14 border-b border-white/10 flex-shrink-0 px-3">
           {open ? (
             <div className="flex items-center justify-between w-full">
@@ -50,7 +131,7 @@ export default function Sidebar() {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2 w-full">
+            <div className="flex flex-col items-center w-full gap-2">
               <button onClick={() => setOpen(true)}
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
                 <IconMenu />
@@ -59,7 +140,7 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* MENU */}
+        {/* Menu desktop */}
         <nav className="flex-1 py-4 overflow-y-auto">
           {NAV_ITEMS.map(({ href, label, icon, highlight }) => {
             const active = pathname === href;
@@ -75,15 +156,13 @@ export default function Sidebar() {
                   }`}>
                 <span className="flex-shrink-0">{icon}</span>
                 {open && <span className="truncate">{label}</span>}
-                {open && active && (
-                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0"></span>
-                )}
+                {open && active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-violet-400 flex-shrink-0"></span>}
               </Link>
             );
           })}
         </nav>
 
-        {/* FOOTER */}
+        {/* Footer desktop */}
         {open && (
           <div className="px-4 pb-4 border-t border-white/10 pt-3">
             <div className="text-xs text-gray-600 text-center">RuteKita v1.0</div>
@@ -92,7 +171,7 @@ export default function Sidebar() {
         )}
       </aside>
 
-      {/* Spacer konten */}
+      {/* Spacer konten desktop */}
       <div className="hidden md:block flex-shrink-0 transition-all duration-300"
         style={{width: open ? '220px' : '64px'}} />
     </>
