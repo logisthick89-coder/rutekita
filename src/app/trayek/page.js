@@ -80,22 +80,6 @@ export default function Trayek() {
 
   return (
     <main className="min-h-screen bg-[#0f0f1a] font-sans pb-20 md:pb-0">
-      <nav className="sticky top-0 z-50 bg-[#0f0f1a]/90 backdrop-blur border-b border-white/10 px-6 h-14 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-            style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>R</div>
-          <span className="text-white">Rute<span className="text-violet-400">Kita</span></span>
-        </Link>
-        <div className="hidden md:flex gap-1">
-          {[['/', 'Beranda'], ['/trayek', 'Trayek'], ['/jadwal', 'Jadwal'], ['/tarif', 'Tarif'], ['/peta', 'Peta'], ['/bisnis', 'Bisnis']].map(([href, label]) => (
-            <Link key={label} href={href}
-              className={`px-3 py-1.5 rounded-full text-sm transition-all
-              ${label === 'Trayek' ? 'bg-violet-500/20 text-violet-300 font-semibold' : label === 'Bisnis' ? 'text-amber-400 hover:text-white hover:bg-white/10' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}>
-              {label}
-            </Link>
-          ))}
-        </div>
-      </nav>
 
       <div className="px-4 py-6 max-w-4xl mx-auto">
 
@@ -365,3 +349,5 @@ export default function Trayek() {
     </main>
   );
 }
+
+

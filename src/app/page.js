@@ -1,5 +1,5 @@
 ﻿'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { SkeletonStatCard } from '@/components/Skeleton';
@@ -61,6 +61,49 @@ function MarqueeTitle() {
   );
 }
 
+function useCountUp(target, duration = 1500) {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (target === 0) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true); },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target, started]);
+
+  useEffect(() => {
+    if (!started || target === 0) return;
+    let startTime = null;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+      else setCount(target);
+    };
+    requestAnimationFrame(step);
+  }, [started, target, duration]);
+
+  return { count, ref };
+}
+
+function StatCard({ num, label, color, icon }) {
+  const { count, ref } = useCountUp(num);
+  return (
+    <div ref={ref} className={`bg-gradient-to-br ${color} rounded-2xl p-3 md:p-6 text-center`}>
+      <div className="flex justify-center mb-1">{icon}</div>
+      <div className="text-xl md:text-4xl font-bold text-white">{count}</div>
+      <div className="text-xs text-white/70 mt-0.5 leading-tight">{label}</div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [stats, setStats] = useState({ trayek: 0, jadwal: 0, armada: 0 });
   const [loading, setLoading] = useState(true);
@@ -85,34 +128,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#0f0f1a] font-sans">
 
-      {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 bg-[#0f0f1a]/90 backdrop-blur border-b border-white/10 px-6 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-bold text-lg">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-            style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>R</div>
-          <span className="text-white">Rute<span className="text-violet-400">Kita</span></span>
-        </div>
-        <div className="hidden md:flex gap-1">
-          {[['/', 'Beranda'], ['/trayek', 'Trayek'], ['/jadwal', 'Jadwal'], ['/tarif', 'Tarif'], ['/peta', 'Peta'], ['/bisnis', 'Bisnis']].map(([href, label]) => (
-            <Link key={label} href={href}
-              className={`px-3 py-1.5 rounded-full text-sm transition-all
-              ${label === 'Beranda' ? 'bg-violet-500/20 text-violet-300 font-semibold' :
-                label === 'Bisnis' ? 'text-amber-400 hover:text-white hover:bg-white/10' :
-                'text-gray-400 hover:text-white hover:bg-white/10'}`}>
-              {label}
-            </Link>
-          ))}
-        </div>
-        <Link href="/cari" className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold text-white"
-          style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
-          <IconSearch size={14}/> Cari Trayek
-        </Link>
-        <Link href="/cari" className="md:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white"
-          style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>
-          <IconSearch size={13}/> Cari
-        </Link>
-      </nav>
-
       {/* MARQUEE TITLE */}
       <div className="py-4 md:py-6 border-b border-white/5 overflow-hidden">
         <MarqueeTitle />
@@ -134,7 +149,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6 max-w-md">
-              Temukan trayek, jadwal keberangkatan, tarif, dan rute angkutan umum Kabupaten Garut  semua dalam satu tempat.
+              Temukan trayek, jadwal keberangkatan, tarif, dan rute angkutan umum Kabupaten Garut — semua dalam satu tempat.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/cari"
@@ -169,11 +184,7 @@ export default function Home() {
               { num: stats.jadwal, label: 'Jadwal/hari', color: 'from-blue-600 to-cyan-600', icon: <IconClock size={24} className="text-white/90"/> },
               { num: stats.armada, label: 'Total Armada', color: 'from-emerald-600 to-teal-600', icon: <IconUsers size={24} className="text-white/90"/> },
             ].map(({ num, label, color, icon }) => (
-              <div key={label} className={`bg-gradient-to-br ${color} rounded-2xl p-3 md:p-6 text-center`}>
-                <div className="flex justify-center mb-1">{icon}</div>
-                <div className="text-xl md:text-4xl font-bold text-white">{num}</div>
-                <div className="text-xs text-white/70 mt-0.5 leading-tight">{label}</div>
-              </div>
+              <StatCard key={label} num={num} label={label} color={color} icon={icon} />
             ))
           )}
         </div>
@@ -185,7 +196,7 @@ export default function Home() {
             { icon: <IconClock size={22}/>, title: 'Jadwal', desc: 'Jam keberangkatan', href: '/jadwal', accent: 'hover:border-blue-500', iconBg: 'bg-blue-500/10 text-blue-400' },
             { icon: <IconMoney size={22}/>, title: 'Tarif', desc: 'Harga per segmen', href: '/tarif', accent: 'hover:border-emerald-500', iconBg: 'bg-emerald-500/10 text-emerald-400' },
             { icon: <IconMap size={22}/>, title: 'Peta', desc: 'Rute interaktif', href: '/peta', accent: 'hover:border-orange-500', iconBg: 'bg-orange-500/10 text-orange-400' },
-            { icon: <IconSearch size={22}/>, title: 'Cari Trayek', desc: 'Cari dari  ke', href: '/cari', accent: 'hover:border-violet-500', iconBg: 'bg-violet-500/10 text-violet-400' },
+            { icon: <IconSearch size={22}/>, title: 'Cari Trayek', desc: 'Cari dari ke', href: '/cari', accent: 'hover:border-violet-500', iconBg: 'bg-violet-500/10 text-violet-400' },
             { icon: <IconBriefcase size={22}/>, title: 'Bisnis', desc: 'Info usaha angkot', href: '/bisnis', accent: 'hover:border-amber-500', iconBg: 'bg-amber-500/10 text-amber-400' },
           ].map(({ icon, title, desc, href, accent, iconBg }) => (
             <Link key={title} href={href}
@@ -210,7 +221,7 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="text-white font-bold text-base">Punya pertanyaan?</h3>
-                <p className="text-gray-400 text-sm">Tanya asisten AI RuteKita  siap bantu 24 jam</p>
+                <p className="text-gray-400 text-sm">Tanya asisten AI RuteKita — siap bantu 24 jam</p>
               </div>
             </div>
             <button onClick={openChatBot}
@@ -242,5 +253,4 @@ export default function Home() {
     </main>
   );
 }
-
 

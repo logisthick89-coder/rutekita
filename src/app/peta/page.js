@@ -1,7 +1,6 @@
 ﻿'use client';
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import Link from 'next/link';
 import BottomNav from '@/components/BottomNav';
 
 const supabase = createClient(
@@ -15,7 +14,7 @@ const WARNA_TRAYEK = {
   '03': '#ef4444',
   '04': '#eab308',
   '05': '#22c55e',
-  '06': '#6b7280',
+  '06': '#f97316',
 };
 
 function formatRp(n) { return n ? 'Rp' + Number(n).toLocaleString('id-ID') : '-'; }
@@ -46,6 +45,7 @@ export default function Peta() {
     async function initMap() {
       const L = (await import('leaflet')).default;
       await import('leaflet/dist/leaflet.css');
+
       if (mapInstanceRef.current) { mapInstanceRef.current.remove(); mapInstanceRef.current = null; }
 
       const map = L.map(mapRef.current).setView([-7.2120, 107.9067], 12);
@@ -145,25 +145,9 @@ export default function Peta() {
 
   return (
     <main className="min-h-screen bg-[#0f0f1a] font-sans">
-      <nav className="sticky top-0 z-50 bg-[#0f0f1a]/90 backdrop-blur border-b border-white/10 px-6 h-14 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>R</div>
-          <span className="text-white">Rute<span className="text-violet-400">Kita</span></span>
-        </Link>
-        <div className="hidden md:flex gap-1">
-          {[['/', 'Beranda'], ['/trayek', 'Trayek'], ['/jadwal', 'Jadwal'], ['/tarif', 'Tarif'], ['/peta', 'Peta'], ['/bisnis', 'Bisnis']].map(([href, label]) => (
-            <Link key={label} href={href}
-              className={`px-3 py-1.5 rounded-full text-sm transition-all
-              ${label === 'Peta' ? 'bg-violet-500/20 text-violet-300 font-semibold' : label === 'Bisnis' ? 'text-amber-400 hover:text-white hover:bg-white/10' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}>
-              {label}
-            </Link>
-          ))}
-        </div>
-      </nav>
-
+      {/* FILTER TRAYEK */}
       <div className="bg-[#0f0f1a]/95 border-b border-white/10 px-4 py-3 z-40 relative">
-        <div className="flex gap-2 overflow-x-auto max-w-4xl mx-auto">
+        <div className="flex gap-2 overflow-x-auto">
           <button onClick={() => setSelectedTrayek('semua')}
             className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-semibold border transition-all
             ${selectedTrayek === 'semua' ? 'text-white border-transparent' : 'bg-transparent text-gray-400 border-white/10 hover:border-white/30'}`}
@@ -186,7 +170,7 @@ export default function Peta() {
         <div className="flex items-center justify-center h-96 text-gray-500 text-sm">Memuat peta...</div>
       ) : (
         <div style={{ position: 'relative' }}>
-          <div ref={mapRef} style={{ height: 'calc(100vh - 112px)', width: '100%', zIndex: 0 }} />
+          <div ref={mapRef} style={{ height: 'calc(100vh - 56px)', width: '100%', zIndex: 0 }} />
 
           {activeInfo && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md"
@@ -214,27 +198,24 @@ export default function Peta() {
                       color: '#9ca3af', fontSize: '12px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       cursor: 'pointer', flexShrink: 0,
-                    }}></button>
+                    }}>x</button>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 mt-3">
                 {activeInfo.jumlah_armada != null && (
                   <div className="rounded-xl px-3 py-2 text-center" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
-                    <div className="text-lg mb-0.5"></div>
                     <div className="text-sm font-bold text-violet-300">{activeInfo.jumlah_armada}</div>
                     <div className="text-xs text-gray-500">Armada</div>
                   </div>
                 )}
                 {activeInfo.jarak_km != null && (
                   <div className="rounded-xl px-3 py-2 text-center" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
-                    <div className="text-lg mb-0.5"></div>
                     <div className="text-sm font-bold text-emerald-300">{activeInfo.jarak_km} km</div>
                     <div className="text-xs text-gray-500">Jarak</div>
                   </div>
                 )}
                 {activeInfo.tarif_min != null && (
                   <div className="rounded-xl px-3 py-2 text-center" style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.2)' }}>
-                    <div className="text-lg mb-0.5"></div>
                     <div className="text-sm font-bold text-amber-300">{formatRp(activeInfo.tarif_min)}</div>
                     <div className="text-xs text-gray-500">Tarif min</div>
                   </div>
@@ -242,8 +223,8 @@ export default function Peta() {
               </div>
               {activeInfo.jam_operasi && (
                 <div className="mt-2 text-xs text-gray-500 text-center">
-                   Operasi: <span className="text-gray-300">{activeInfo.jam_operasi}</span>
-                  {activeInfo.hari_operasi && <span className="ml-2"> {activeInfo.hari_operasi}</span>}
+                  Operasi: <span className="text-gray-300">{activeInfo.jam_operasi}</span>
+                  {activeInfo.hari_operasi && <span className="ml-2">{activeInfo.hari_operasi}</span>}
                 </div>
               )}
             </div>
@@ -259,7 +240,7 @@ export default function Peta() {
             <button key={t.kode_trayek}
               onClick={() => setSelectedTrayek(t.kode_trayek === selectedTrayek ? 'semua' : t.kode_trayek)}
               className="flex items-center gap-2 mb-1.5 w-full text-left hover:opacity-80 transition-opacity">
-              <div className="w-6 h-1.5 rounded-full transition-all"
+              <div className="w-6 rounded-full transition-all"
                 style={{
                   background: WARNA_TRAYEK[t.kode_trayek],
                   opacity: selectedTrayek === 'semua' || selectedTrayek === t.kode_trayek ? 1 : 0.3,
@@ -278,5 +259,3 @@ export default function Peta() {
     </main>
   );
 }
-
-

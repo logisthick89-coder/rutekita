@@ -271,31 +271,6 @@ function CariContent() {
 
   return (
     <main className="min-h-screen bg-[#0f0f1a] font-sans pb-20 md:pb-8">
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-[#0f0f1a]/90 backdrop-blur border-b border-white/10 px-6 h-14 flex items-center gap-4">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg flex-shrink-0">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>R</div>
-          <span className="text-white hidden md:block">Rute<span className="text-violet-400">Kita</span></span>
-        </Link>
-        {mode === 'keyword' ? (
-          <form onSubmit={handleSearch} className="flex-1 flex items-center gap-2 bg-white/5 border border-violet-500/40 rounded-full px-4 py-2 focus-within:border-violet-500 transition-all">
-            <span className="text-gray-400"></span>
-            <input type="text" value={query} onChange={e => setQuery(e.target.value)}
-              placeholder="Cari trayek, halte, atau tujuan..."
-              className="bg-transparent text-white text-sm outline-none placeholder-gray-500 flex-1" autoFocus />
-            {query && (
-              <button type="button" onClick={() => setQuery('')}
-                className="text-gray-500 hover:text-gray-300 transition-colors text-lg leading-none"></button>
-            )}
-          </form>
-        ) : (
-          <div className="flex-1 flex items-center gap-2 text-sm text-violet-300 font-medium">
-            Cari Rute Dari  Ke
-          </div>
-        )}
-        <Link href="/" className="text-gray-400 hover:text-white text-sm transition-colors flex-shrink-0"> Kembali</Link>
-      </nav>
 
       {/* Toggle mode */}
       <div className="px-6 pt-5 max-w-2xl mx-auto">
@@ -420,4 +395,6 @@ export default function Cari() {
     </Suspense>
   );
 }
+
+
 

@@ -17,24 +17,6 @@ export default function Bisnis() {
   return (
     <main className="min-h-screen bg-[#0f0f1a] font-sans pb-24 md:pb-8">
 
-      {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-[#0f0f1a]/90 backdrop-blur border-b border-white/10 px-6 h-14 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-            style={{background: 'linear-gradient(135deg, #6366f1, #8b5cf6)'}}>R</div>
-          <span className="text-white">Rute<span className="text-violet-400">Kita</span></span>
-        </Link>
-        <div className="hidden md:flex gap-1">
-          {[['/', 'Beranda'], ['/trayek', 'Trayek'], ['/jadwal', 'Jadwal'], ['/tarif', 'Tarif'], ['/peta', 'Peta'], ['/bisnis', 'Bisnis']].map(([href, label]) => (
-            <Link key={label} href={href}
-              className={`px-3 py-1.5 rounded-full text-sm transition-all
-              ${label === 'Bisnis' ? 'bg-amber-500/20 text-amber-300 font-semibold' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}>
-              {label}
-            </Link>
-          ))}
-        </div>
-      </nav>
-
       {/* Hero */}
       <section className="px-6 pt-8 pb-6 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1 mb-3">
@@ -411,4 +393,6 @@ export default function Bisnis() {
     </main>
   );
 }
+
+
 
