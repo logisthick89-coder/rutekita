@@ -1,7 +1,6 @@
 ﻿'use client';
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import BottomNav from '@/components/BottomNav';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -254,8 +253,7 @@ export default function Peta() {
           ))}
         </div>
       )}
-
-      <BottomNav />
     </main>
   );
 }
+

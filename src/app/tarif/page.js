@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
-import BottomNav from '@/components/BottomNav';
 import { SkeletonTarifCard } from '@/components/Skeleton';
 
 const supabase = createClient(
@@ -132,11 +131,10 @@ export default function Tarif() {
           <div className="text-center py-10 text-gray-500 text-sm">Data tarif tidak ditemukan.</div>
         )}
       </div>
-
-      <BottomNav />
     </main>
   );
 }
+
 
 
 

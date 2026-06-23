@@ -142,7 +142,7 @@ export default function Tentang() {
         </div>
 
       </div>
-      <BottomNav />
     </main>
   );
 }
+

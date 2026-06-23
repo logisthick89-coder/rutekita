@@ -1,7 +1,6 @@
 ﻿'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import BottomNav from '@/components/BottomNav';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: '' },
@@ -388,11 +387,10 @@ export default function Bisnis() {
         )}
 
       </div>
-
-      <BottomNav />
     </main>
   );
 }
+
 
 
 

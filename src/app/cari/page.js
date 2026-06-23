@@ -3,7 +3,6 @@ import { useState, useEffect, Suspense } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import BottomNav from '@/components/BottomNav';
 import { SkeletonCariCard } from '@/components/Skeleton';
 
 const supabase = createClient(
@@ -382,8 +381,6 @@ function CariContent() {
           </>
         )}
       </div>
-
-      <BottomNav />
     </main>
   );
 }
@@ -395,6 +392,7 @@ export default function Cari() {
     </Suspense>
   );
 }
+
 
 
 

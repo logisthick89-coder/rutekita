@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
-import BottomNav from '@/components/BottomNav';
 import { SkeletonTrayekCard } from '@/components/Skeleton';
 
 const supabase = createClient(
@@ -344,10 +343,9 @@ export default function Trayek() {
           </>
         )}
       </div>
-
-      <BottomNav />
     </main>
   );
 }
+
 
 
