@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -116,7 +116,7 @@ export default function Tarif() {
                 <div key={t.id} className="flex items-center px-4 py-3">
                   <div className="flex-1 text-sm text-gray-700">{t.segmen_asal}</div>
                   <div className="flex-1 flex items-center gap-1 text-sm text-gray-700">
-                    <span className="text-gray-300 mr-1">→</span>
+                    <span className="text-gray-300 mr-1"></span>
                     {t.segmen_tujuan}
                   </div>
                   <div className="text-sm font-bold text-green-700">{formatRp(t.harga)}</div>
@@ -137,7 +137,7 @@ export default function Tarif() {
  
       {/* BOTTOM NAV */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 border-t border-gray-100 flex h-14 z-40">
-        {[['/', '🏠', 'Beranda'], ['/', '🚌', 'Trayek'], ['/peta', '🗺️', 'Peta'], ['/jadwal', '📅', 'Jadwal']].map(([href, icon, label]) => (
+        {[['/', '', 'Beranda'], ['/', '', 'Trayek'], ['/peta', '', 'Peta'], ['/jadwal', '', 'Jadwal']].map(([href, icon, label]) => (
           <Link key={label} href={href}
             className="flex-1 flex flex-col items-center justify-center gap-0.5 text-xs text-gray-400 hover:text-green-600">
             <span className="text-lg">{icon}</span>{label}

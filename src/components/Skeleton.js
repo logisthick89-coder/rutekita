@@ -1,4 +1,4 @@
-// Komponen Skeleton untuk loading state
+﻿// Komponen Skeleton untuk loading state
 
 export function SkeletonBox({ className = '' }) {
   return (
@@ -110,3 +110,4 @@ export function SkeletonCariCard() {
     </div>
   );
 }
+

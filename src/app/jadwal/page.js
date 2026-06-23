@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -108,21 +108,21 @@ export default function Jadwal() {
             <div className="px-4 py-3 border-b border-white/10 flex flex-wrap gap-x-5 gap-y-1.5">
               {jadwalList[0]?.hari_operasi && (
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">📅</span>
+                  <span className="text-base"></span>
                   <span className="text-xs text-gray-500">Operasi:</span>
                   <span className="text-xs font-medium text-gray-300">{jadwalList[0].hari_operasi}</span>
                 </div>
               )}
               {info?.jumlah_armada != null && (
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">🚌</span>
+                  <span className="text-base"></span>
                   <span className="text-xs text-gray-500">Armada:</span>
                   <span className="text-xs font-semibold text-violet-300">{info.jumlah_armada} unit</span>
                 </div>
               )}
               {info?.jarak_km != null && (
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">📍</span>
+                  <span className="text-base"></span>
                   <span className="text-xs text-gray-500">Jarak:</span>
                   <span className="text-xs font-semibold text-emerald-300">{info.jarak_km} km</span>
                 </div>
@@ -133,7 +133,7 @@ export default function Jadwal() {
             <div className="p-4 grid grid-cols-4 gap-2">
               {jadwalList.map(j => (
                 <div key={j.id} className="bg-white/5 border border-white/10 rounded-xl py-2.5 text-center hover:border-violet-500/50 transition-all">
-                  <div className="text-sm font-bold text-white">⏰ {j.jam_berangkat}</div>
+                  <div className="text-sm font-bold text-white"> {j.jam_berangkat}</div>
                 </div>
               ))}
             </div>
@@ -151,3 +151,4 @@ export default function Jadwal() {
     </main>
   );
 }
+

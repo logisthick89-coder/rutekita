@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+﻿import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ChatBot from "@/components/ChatBot";
 import BottomNav from "@/components/BottomNav";
@@ -18,7 +18,7 @@ const BASE_URL = "https://rutekita-delta.vercel.app";
 export const metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "RuteKita — Angkutan Umum Kabupaten Garut",
+    default: "RuteKita  Angkutan Umum Kabupaten Garut",
     template: "%s | RuteKita",
   },
   description:
@@ -46,14 +46,14 @@ export const metadata = {
     locale: "id_ID",
     url: BASE_URL,
     siteName: "RuteKita",
-    title: "RuteKita — Angkutan Umum Kabupaten Garut",
+    title: "RuteKita  Angkutan Umum Kabupaten Garut",
     description:
       "Temukan trayek, jadwal, tarif, dan peta rute angkutan umum Kabupaten Garut dalam satu tempat. Data resmi Dishub Garut.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RuteKita — Angkutan Umum Kabupaten Garut" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RuteKita  Angkutan Umum Kabupaten Garut" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RuteKita — Angkutan Umum Kabupaten Garut",
+    title: "RuteKita  Angkutan Umum Kabupaten Garut",
     description: "Temukan trayek, jadwal, tarif, dan peta rute angkutan umum Kabupaten Garut dalam satu tempat.",
     images: ["/og-image.png"],
   },
@@ -79,3 +79,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -214,27 +214,27 @@ export default function Peta() {
                       color: '#9ca3af', fontSize: '12px',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       cursor: 'pointer', flexShrink: 0,
-                    }}>✕</button>
+                    }}></button>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 mt-3">
                 {activeInfo.jumlah_armada != null && (
                   <div className="rounded-xl px-3 py-2 text-center" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
-                    <div className="text-lg mb-0.5">🚌</div>
+                    <div className="text-lg mb-0.5"></div>
                     <div className="text-sm font-bold text-violet-300">{activeInfo.jumlah_armada}</div>
                     <div className="text-xs text-gray-500">Armada</div>
                   </div>
                 )}
                 {activeInfo.jarak_km != null && (
                   <div className="rounded-xl px-3 py-2 text-center" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
-                    <div className="text-lg mb-0.5">📍</div>
+                    <div className="text-lg mb-0.5"></div>
                     <div className="text-sm font-bold text-emerald-300">{activeInfo.jarak_km} km</div>
                     <div className="text-xs text-gray-500">Jarak</div>
                   </div>
                 )}
                 {activeInfo.tarif_min != null && (
                   <div className="rounded-xl px-3 py-2 text-center" style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.2)' }}>
-                    <div className="text-lg mb-0.5">💰</div>
+                    <div className="text-lg mb-0.5"></div>
                     <div className="text-sm font-bold text-amber-300">{formatRp(activeInfo.tarif_min)}</div>
                     <div className="text-xs text-gray-500">Tarif min</div>
                   </div>
@@ -242,8 +242,8 @@ export default function Peta() {
               </div>
               {activeInfo.jam_operasi && (
                 <div className="mt-2 text-xs text-gray-500 text-center">
-                  🕐 Operasi: <span className="text-gray-300">{activeInfo.jam_operasi}</span>
-                  {activeInfo.hari_operasi && <span className="ml-2">📅 {activeInfo.hari_operasi}</span>}
+                   Operasi: <span className="text-gray-300">{activeInfo.jam_operasi}</span>
+                  {activeInfo.hari_operasi && <span className="ml-2"> {activeInfo.hari_operasi}</span>}
                 </div>
               )}
             </div>
@@ -278,4 +278,5 @@ export default function Peta() {
     </main>
   );
 }
+
 

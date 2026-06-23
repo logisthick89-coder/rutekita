@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -175,7 +175,7 @@ export default function Trayek() {
           <>
             <div className="flex items-center gap-3 mb-6">
               <button onClick={kembaliKeList}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20">←</button>
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20"></button>
               <div>
                 <div className="flex items-center gap-2">
                   <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[selected.jenis] || 'from-gray-600 to-gray-700'}`}>
@@ -190,7 +190,7 @@ export default function Trayek() {
               </div>
             </div>
             <div className="grid grid-cols-3 gap-3 mb-6">
-              {[['🚌', 'Armada', `${selected.jumlah_armada || '-'} unit`],['📏', 'Total Jarak', `${selected.jarak_km || '-'} km`],['⏰', 'Jam Operasi', selected.jam_operasi]].map(([icon, label, val]) => (
+              {[['', 'Armada', `${selected.jumlah_armada || '-'} unit`],['', 'Total Jarak', `${selected.jarak_km || '-'} km`],['', 'Jam Operasi', selected.jam_operasi]].map(([icon, label, val]) => (
                 <div key={label} className="bg-white/5 border border-white/10 rounded-xl p-3 text-center">
                   <div className="text-lg mb-1">{icon}</div>
                   <div className="text-xs text-gray-500 mb-0.5">{label}</div>
@@ -204,11 +204,11 @@ export default function Trayek() {
               <>
                 <div className="mb-4">
                   <p className="text-white font-semibold mb-1">
-                    {!asalHalte ? '📍 Pilih titik naik (asal)' : '🏁 Pilih titik turun (tujuan)'}
+                    {!asalHalte ? ' Pilih titik naik (asal)' : ' Pilih titik turun (tujuan)'}
                   </p>
                   <p className="text-gray-500 text-xs">
                     {!asalHalte ? 'Kamu bisa naik dari titik mana saja sepanjang rute'
-                      : `Naik dari: ${asalHalte.nama_halte} — pilih titik turun`}
+                      : `Naik dari: ${asalHalte.nama_halte}  pilih titik turun`}
                   </p>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
@@ -241,7 +241,7 @@ export default function Trayek() {
                               {isTujuan && <span className="ml-2 text-xs bg-emerald-500/30 text-emerald-300 px-1.5 py-0.5 rounded-full">Turun</span>}
                             </div>
                             {h.jarak_ke_berikutnya > 0 && i < detail.halte.length - 1 && (
-                              <div className="text-xs text-gray-600 mt-0.5">↕ {h.jarak_ke_berikutnya} km ke titik berikutnya</div>
+                              <div className="text-xs text-gray-600 mt-0.5"> {h.jarak_ke_berikutnya} km ke titik berikutnya</div>
                             )}
                           </div>
                         </div>
@@ -251,7 +251,7 @@ export default function Trayek() {
                 </div>
                 {asalHalte && (
                   <button onClick={() => { setAsalHalte(null); setTujuanHalte(null); }}
-                    className="mt-3 text-xs text-gray-500 hover:text-gray-300 transition-all">↩ Reset pilihan</button>
+                    className="mt-3 text-xs text-gray-500 hover:text-gray-300 transition-all"> Reset pilihan</button>
                 )}
               </>
             )}
@@ -262,7 +262,7 @@ export default function Trayek() {
           <>
             <div className="flex items-center gap-3 mb-6">
               <button onClick={kembaliKeRute}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20">←</button>
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20"></button>
               <div>
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[selected.jenis] || 'from-gray-600 to-gray-700'}`}>
                   Trayek {selected.kode_trayek}
@@ -274,12 +274,12 @@ export default function Trayek() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="flex-1">
                   <div className="text-xs text-gray-500 mb-1">Dari</div>
-                  <div className="text-sm font-bold text-violet-300">📍 {asalHalte.nama_halte}</div>
+                  <div className="text-sm font-bold text-violet-300"> {asalHalte.nama_halte}</div>
                 </div>
-                <div className="text-gray-600">→</div>
+                <div className="text-gray-600"></div>
                 <div className="flex-1 text-right">
                   <div className="text-xs text-gray-500 mb-1">Ke</div>
-                  <div className="text-sm font-bold text-emerald-300">🏁 {tujuanHalte.nama_halte}</div>
+                  <div className="text-sm font-bold text-emerald-300"> {tujuanHalte.nama_halte}</div>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/10">
@@ -289,7 +289,7 @@ export default function Trayek() {
               </div>
             </div>
             <div className="flex bg-white/5 rounded-xl p-1 mb-5 gap-1">
-              {[['rute', '🗺️ Rute'],['jadwal', '⏰ Jadwal'],['tarif', '💰 Tarif']].map(([tab, label]) => (
+              {[['rute', ' Rute'],['jadwal', ' Jadwal'],['tarif', ' Tarif']].map(([tab, label]) => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
                   className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all
                   ${activeTab === tab ? 'bg-violet-600 text-white' : 'text-gray-500 hover:text-gray-300'}`}>
@@ -313,7 +313,7 @@ export default function Trayek() {
                           {h.nama_halte}
                         </div>
                         {h.jarak_ke_berikutnya > 0 && i < segmen.length - 1 && (
-                          <div className="text-xs text-gray-600 mt-0.5">↕ {h.jarak_ke_berikutnya} km</div>
+                          <div className="text-xs text-gray-600 mt-0.5"> {h.jarak_ke_berikutnya} km</div>
                         )}
                       </div>
                     </div>
@@ -324,16 +324,16 @@ export default function Trayek() {
             {activeTab === 'jadwal' && (
               <div>
                 <div className="bg-violet-500/10 border border-violet-500/20 rounded-xl px-3 py-2 mb-4 text-xs text-violet-300">
-                  📅 Beroperasi: {detail.jadwal[0]?.hari_operasi || selected.hari_operasi}
+                   Beroperasi: {detail.jadwal[0]?.hari_operasi || selected.hari_operasi}
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {detail.jadwal.map(j => (
                     <div key={j.id} className="bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-center hover:border-violet-500/50 transition-all">
-                      <div className="text-sm font-bold text-white">⏰ {j.jam_berangkat}</div>
+                      <div className="text-sm font-bold text-white"> {j.jam_berangkat}</div>
                     </div>
                   ))}
                 </div>
-                <div className="mt-3 text-xs text-gray-500 text-center">{detail.jadwal.length} jadwal/hari • {selected.jumlah_armada} unit armada</div>
+                <div className="mt-3 text-xs text-gray-500 text-center">{detail.jadwal.length} jadwal/hari  {selected.jumlah_armada} unit armada</div>
               </div>
             )}
             {activeTab === 'tarif' && (
@@ -346,7 +346,7 @@ export default function Trayek() {
                       <div key={t.id} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl px-4 py-3">
                         <div className="text-sm text-gray-300">
                           <span className="font-medium">{t.segmen_asal}</span>
-                          <span className="text-gray-600 mx-2">→</span>
+                          <span className="text-gray-600 mx-2"></span>
                           <span className="font-medium">{t.segmen_tujuan}</span>
                         </div>
                         <div className="text-sm font-bold text-emerald-400">{formatRp(t.harga)}</div>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -111,14 +111,14 @@ export default function Tarif() {
               <div className="px-4 py-3 border-b border-white/10 flex flex-wrap gap-x-5 gap-y-1.5">
                 {info?.jumlah_armada != null && (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-base">🚌</span>
+                    <span className="text-base"></span>
                     <span className="text-xs text-gray-500">Armada:</span>
                     <span className="text-xs font-semibold text-violet-300">{info.jumlah_armada} unit</span>
                   </div>
                 )}
                 {info?.jarak_km != null && (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-base">📍</span>
+                    <span className="text-base"></span>
                     <span className="text-xs text-gray-500">Jarak:</span>
                     <span className="text-xs font-semibold text-emerald-300">{info.jarak_km} km</span>
                   </div>
@@ -154,3 +154,4 @@ export default function Tarif() {
     </main>
   );
 }
+

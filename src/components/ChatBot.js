@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useRef, useEffect } from 'react';
 
 const IconChat = () => (
@@ -22,7 +22,7 @@ const SUGGESTIONS = ['Semua trayek', 'Jadwal trayek 01', 'Modal usaha angkot', '
 export default function ChatBot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Halo! Saya asisten RuteKita 👋\n\nSaya bisa bantu kamu soal:\n🚌 Info trayek angkutan umum Garut\n💼 Bisnis dan izin perusahaan angkot\n📊 Rekomendasi trayek untuk investasi\n\nMau tanya apa?' }
+    { role: 'assistant', content: 'Halo! Saya asisten RuteKita \n\nSaya bisa bantu kamu soal:\n Info trayek angkutan umum Garut\n Bisnis dan izin perusahaan angkot\n Rekomendasi trayek untuk investasi\n\nMau tanya apa?' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ export default function ChatBot() {
       const data = await res.json();
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Maaf, terjadi kesalahan. Silakan coba lagi 🙏' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Maaf, terjadi kesalahan. Silakan coba lagi ' }]);
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* FAB — hanya desktop */}
+      {/* FAB  hanya desktop */}
       <button
         onClick={() => setOpen(!open)}
         aria-label="Buka asisten RuteKita"
@@ -96,7 +96,7 @@ export default function ChatBot() {
           {/* Header */}
           <div className="px-4 py-3 flex items-center gap-3 border-b border-white/10"
             style={{background: 'linear-gradient(135deg, #4f46e5, #7c3aed)'}}>
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-base flex-shrink-0">🤖</div>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-base flex-shrink-0"></div>
             <div className="flex-1">
               <div className="text-sm font-bold text-white">Asisten RuteKita</div>
               <div className="text-xs text-white/60 flex items-center gap-1">
@@ -116,7 +116,7 @@ export default function ChatBot() {
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} items-end gap-2`}>
                 {m.role === 'assistant' && (
-                  <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center text-xs flex-shrink-0 mb-0.5">🤖</div>
+                  <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center text-xs flex-shrink-0 mb-0.5"></div>
                 )}
                 <div className={`max-w-[80%] px-3 py-2.5 text-xs leading-relaxed whitespace-pre-line rounded-2xl
                   ${m.role === 'user' ? 'text-white rounded-br-sm' : 'text-gray-200 rounded-bl-sm border border-white/5'}`}
@@ -131,7 +131,7 @@ export default function ChatBot() {
             {/* Loading indicator */}
             {loading && (
               <div className="flex justify-start items-end gap-2">
-                <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center text-xs flex-shrink-0">🤖</div>
+                <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center text-xs flex-shrink-0"></div>
                 <div className="px-3 py-2.5 rounded-2xl rounded-bl-sm border border-white/5 flex gap-1 items-center"
                   style={{background: 'rgba(255,255,255,0.06)'}}>
                   <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{animationDelay: '0ms'}}></span>
@@ -176,4 +176,5 @@ export default function ChatBot() {
     </>
   );
 }
+
 

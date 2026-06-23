@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -27,11 +27,11 @@ function openChatBot() {
 
 function MarqueeTitle() {
   const texts = [
-    '🚌 Naik angkot di Garut jadi lebih mudah',
-    '📍 Temukan rute angkutan umum Kabupaten Garut',
-    '⏰ Cek jadwal & tarif angkot real-time',
-    '🗺️ Lihat peta rute interaktif seluruh trayek',
-    '💼 Informasi bisnis & investasi angkutan umum',
+    ' Naik angkot di Garut jadi lebih mudah',
+    ' Temukan rute angkutan umum Kabupaten Garut',
+    ' Cek jadwal & tarif angkot real-time',
+    ' Lihat peta rute interaktif seluruh trayek',
+    ' Informasi bisnis & investasi angkutan umum',
   ];
   const repeated = [...texts, ...texts, ...texts, ...texts];
 
@@ -134,7 +134,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6 max-w-md">
-              Temukan trayek, jadwal keberangkatan, tarif, dan rute angkutan umum Kabupaten Garut — semua dalam satu tempat.
+              Temukan trayek, jadwal keberangkatan, tarif, dan rute angkutan umum Kabupaten Garut  semua dalam satu tempat.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/cari"
@@ -185,7 +185,7 @@ export default function Home() {
             { icon: <IconClock size={22}/>, title: 'Jadwal', desc: 'Jam keberangkatan', href: '/jadwal', accent: 'hover:border-blue-500', iconBg: 'bg-blue-500/10 text-blue-400' },
             { icon: <IconMoney size={22}/>, title: 'Tarif', desc: 'Harga per segmen', href: '/tarif', accent: 'hover:border-emerald-500', iconBg: 'bg-emerald-500/10 text-emerald-400' },
             { icon: <IconMap size={22}/>, title: 'Peta', desc: 'Rute interaktif', href: '/peta', accent: 'hover:border-orange-500', iconBg: 'bg-orange-500/10 text-orange-400' },
-            { icon: <IconSearch size={22}/>, title: 'Cari Trayek', desc: 'Cari dari → ke', href: '/cari', accent: 'hover:border-violet-500', iconBg: 'bg-violet-500/10 text-violet-400' },
+            { icon: <IconSearch size={22}/>, title: 'Cari Trayek', desc: 'Cari dari  ke', href: '/cari', accent: 'hover:border-violet-500', iconBg: 'bg-violet-500/10 text-violet-400' },
             { icon: <IconBriefcase size={22}/>, title: 'Bisnis', desc: 'Info usaha angkot', href: '/bisnis', accent: 'hover:border-amber-500', iconBg: 'bg-amber-500/10 text-amber-400' },
           ].map(({ icon, title, desc, href, accent, iconBg }) => (
             <Link key={title} href={href}
@@ -210,7 +210,7 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="text-white font-bold text-base">Punya pertanyaan?</h3>
-                <p className="text-gray-400 text-sm">Tanya asisten AI RuteKita — siap bantu 24 jam</p>
+                <p className="text-gray-400 text-sm">Tanya asisten AI RuteKita  siap bantu 24 jam</p>
               </div>
             </div>
             <button onClick={openChatBot}
@@ -242,4 +242,5 @@ export default function Home() {
     </main>
   );
 }
+
 

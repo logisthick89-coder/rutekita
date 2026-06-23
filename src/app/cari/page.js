@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect, Suspense } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -49,7 +49,7 @@ function DetailTrayek({ trayek, halteList, warna, onClose }) {
         <div className="flex flex-col gap-4">
           {halteList && halteList.length > 0 && (
             <div>
-              <div className="text-xs font-semibold text-gray-400 mb-2">📍 Titik Pemberhentian</div>
+              <div className="text-xs font-semibold text-gray-400 mb-2"> Titik Pemberhentian</div>
               <div className="flex flex-wrap gap-1.5">
                 {halteList.map((h, i) => (
                   <span key={i} className="text-xs px-2.5 py-1 rounded-full"
@@ -62,7 +62,7 @@ function DetailTrayek({ trayek, halteList, warna, onClose }) {
           )}
           {jadwal.length > 0 && (
             <div>
-              <div className="text-xs font-semibold text-gray-400 mb-2">⏰ Jadwal Keberangkatan</div>
+              <div className="text-xs font-semibold text-gray-400 mb-2"> Jadwal Keberangkatan</div>
               <div className="grid grid-cols-4 gap-1.5">
                 {jadwal.map(j => (
                   <div key={j.id} className="bg-white/5 border border-white/10 rounded-lg py-1.5 text-center">
@@ -71,17 +71,17 @@ function DetailTrayek({ trayek, halteList, warna, onClose }) {
                 ))}
               </div>
               {jadwal[0]?.hari_operasi && (
-                <div className="text-xs text-gray-500 mt-1.5">📅 {jadwal[0].hari_operasi}</div>
+                <div className="text-xs text-gray-500 mt-1.5"> {jadwal[0].hari_operasi}</div>
               )}
             </div>
           )}
           {tarif.length > 0 && (
             <div>
-              <div className="text-xs font-semibold text-gray-400 mb-2">💰 Tarif per Segmen</div>
+              <div className="text-xs font-semibold text-gray-400 mb-2"> Tarif per Segmen</div>
               <div className="flex flex-col gap-1">
                 {tarif.map(t => (
                   <div key={t.id} className="flex items-center justify-between px-3 py-2 bg-white/5 rounded-lg">
-                    <span className="text-xs text-gray-300">{t.segmen_asal} → {t.segmen_tujuan}</span>
+                    <span className="text-xs text-gray-300">{t.segmen_asal}  {t.segmen_tujuan}</span>
                     <span className="text-xs font-bold text-emerald-400">{formatRp(t.harga)}</span>
                   </div>
                 ))}
@@ -91,7 +91,7 @@ function DetailTrayek({ trayek, halteList, warna, onClose }) {
         </div>
       )}
       <button onClick={onClose} className="mt-3 text-xs text-gray-500 hover:text-gray-300 transition-colors">
-        ▲ Tutup detail
+         Tutup detail
       </button>
     </div>
   );
@@ -131,21 +131,21 @@ function HasilCard({ item, highlightAsal, highlightTujuan }) {
               <span className={`w-1.5 h-1.5 rounded-full ${t?.aktif ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
               {t?.aktif ? 'Aktif' : 'Nonaktif'}
             </span>
-            <span className="text-gray-500 text-xs">{expanded ? '▲' : '▼'}</span>
+            <span className="text-gray-500 text-xs">{expanded ? '' : ''}</span>
           </div>
         </div>
 
-        {/* Badge halte cocok untuk mode Dari→Ke */}
+        {/* Badge halte cocok untuk mode DariKe */}
         {(highlightAsal || highlightTujuan) && (
           <div className="mt-2 flex items-center gap-2 flex-wrap">
             {highlightAsal && (
               <span className="text-xs px-2.5 py-1 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
-                🟣 Naik: {highlightAsal}
+                 Naik: {highlightAsal}
               </span>
             )}
             {highlightTujuan && (
               <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                🟢 Turun: {highlightTujuan}
+                 Turun: {highlightTujuan}
               </span>
             )}
           </div>
@@ -157,16 +157,16 @@ function HasilCard({ item, highlightAsal, highlightTujuan }) {
             {item.halte.map((h, j) => (
               <span key={j} className="text-xs px-2.5 py-1 rounded-full"
                 style={{ background: warna + '22', color: warna, border: `1px solid ${warna}44` }}>
-                📍 {h.nama_halte}
+                 {h.nama_halte}
               </span>
             ))}
           </div>
         )}
 
         <div className="flex gap-3 flex-wrap mt-2">
-          {t?.jumlah_armada != null && <span className="text-xs text-gray-400">🚌 {t.jumlah_armada} armada</span>}
-          {t?.jarak_km != null && <span className="text-xs text-gray-400">📍 {t.jarak_km} km</span>}
-          {t?.tarif_min != null && <span className="text-xs text-amber-400">💰 ab {formatRp(t.tarif_min)}</span>}
+          {t?.jumlah_armada != null && <span className="text-xs text-gray-400"> {t.jumlah_armada} armada</span>}
+          {t?.jarak_km != null && <span className="text-xs text-gray-400"> {t.jarak_km} km</span>}
+          {t?.tarif_min != null && <span className="text-xs text-amber-400"> ab {formatRp(t.tarif_min)}</span>}
         </div>
       </button>
 
@@ -235,7 +235,7 @@ function CariContent() {
     setLoading(false);
   }, [query, dataLoaded, semuaTrayek, semuaHalte, mode]);
 
-  // Mode Dari → Ke
+  // Mode Dari  Ke
   function cariRute() {
     if (!dari || !ke || dari === ke) return;
     setLoading(true);
@@ -280,21 +280,21 @@ function CariContent() {
         </Link>
         {mode === 'keyword' ? (
           <form onSubmit={handleSearch} className="flex-1 flex items-center gap-2 bg-white/5 border border-violet-500/40 rounded-full px-4 py-2 focus-within:border-violet-500 transition-all">
-            <span className="text-gray-400">🔍</span>
+            <span className="text-gray-400"></span>
             <input type="text" value={query} onChange={e => setQuery(e.target.value)}
               placeholder="Cari trayek, halte, atau tujuan..."
               className="bg-transparent text-white text-sm outline-none placeholder-gray-500 flex-1" autoFocus />
             {query && (
               <button type="button" onClick={() => setQuery('')}
-                className="text-gray-500 hover:text-gray-300 transition-colors text-lg leading-none">✕</button>
+                className="text-gray-500 hover:text-gray-300 transition-colors text-lg leading-none"></button>
             )}
           </form>
         ) : (
           <div className="flex-1 flex items-center gap-2 text-sm text-violet-300 font-medium">
-            Cari Rute Dari → Ke
+            Cari Rute Dari  Ke
           </div>
         )}
-        <Link href="/" className="text-gray-400 hover:text-white text-sm transition-colors flex-shrink-0">← Kembali</Link>
+        <Link href="/" className="text-gray-400 hover:text-white text-sm transition-colors flex-shrink-0"> Kembali</Link>
       </nav>
 
       {/* Toggle mode */}
@@ -303,21 +303,21 @@ function CariContent() {
           <button onClick={() => { setMode('keyword'); setHasil([]); }}
             className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5
             ${mode === 'keyword' ? 'bg-violet-600 text-white' : 'text-gray-500 hover:text-gray-300'}`}>
-            🔍 Cari Keyword
+             Cari Keyword
           </button>
           <button onClick={() => { setMode('rute'); setHasil([]); setQuery(''); }}
             className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5
             ${mode === 'rute' ? 'bg-violet-600 text-white' : 'text-gray-500 hover:text-gray-300'}`}>
-            🗺️ Dari → Ke
+             Dari  Ke
           </button>
         </div>
 
-        {/* Mode Dari → Ke */}
+        {/* Mode Dari  Ke */}
         {mode === 'rute' && (
           <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5">
             <div className="flex flex-col gap-3">
               <div>
-                <label className="text-xs text-gray-500 mb-1.5 block">🟣 Titik Naik (Dari)</label>
+                <label className="text-xs text-gray-500 mb-1.5 block"> Titik Naik (Dari)</label>
                 <select value={dari} onChange={e => setDari(e.target.value)}
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500/60 transition-all appearance-none">
                   <option value="" style={{background:'#1a1a2e'}}>Pilih halte asal...</option>
@@ -326,11 +326,11 @@ function CariContent() {
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-px bg-white/10"></div>
-                <span className="text-gray-600 text-xs">↓</span>
+                <span className="text-gray-600 text-xs"></span>
                 <div className="flex-1 h-px bg-white/10"></div>
               </div>
               <div>
-                <label className="text-xs text-gray-500 mb-1.5 block">🟢 Titik Turun (Ke)</label>
+                <label className="text-xs text-gray-500 mb-1.5 block"> Titik Turun (Ke)</label>
                 <select value={ke} onChange={e => setKe(e.target.value)}
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500/60 transition-all appearance-none">
                   <option value="" style={{background:'#1a1a2e'}}>Pilih halte tujuan...</option>
@@ -351,7 +351,7 @@ function CariContent() {
         {/* State kosong keyword */}
         {mode === 'keyword' && !query.trim() && (
           <div className="text-center py-16">
-            <div className="text-5xl mb-4">🔍</div>
+            <div className="text-5xl mb-4"></div>
             <p className="text-gray-400 text-sm">Ketik nama trayek, halte, atau tujuan di atas</p>
             <p className="text-gray-600 text-xs mt-2">Contoh: Tarogong, Cibatu, Garut Kota</p>
           </div>
@@ -360,7 +360,7 @@ function CariContent() {
         {/* State kosong rute */}
         {mode === 'rute' && hasil.length === 0 && !loading && (!dari || !ke) && (
           <div className="text-center py-10">
-            <div className="text-5xl mb-4">🗺️</div>
+            <div className="text-5xl mb-4"></div>
             <p className="text-gray-400 text-sm">Pilih titik naik dan turun untuk mencari trayek</p>
           </div>
         )}
@@ -375,7 +375,7 @@ function CariContent() {
           (mode === 'keyword' && query.trim()) || (mode === 'rute' && dari && ke)
         ) && (
           <div className="text-center py-16">
-            <div className="text-5xl mb-4">😕</div>
+            <div className="text-5xl mb-4"></div>
             <p className="text-gray-400 text-sm">
               {mode === 'rute'
                 ? `Tidak ada trayek langsung dari ${dari} ke ${ke}`
@@ -393,7 +393,7 @@ function CariContent() {
             <p className="text-xs text-gray-500 mb-4">
               {hasil.length} trayek ditemukan
               {mode === 'rute' && dari && ke && (
-                <span className="text-gray-400"> · <span className="text-violet-300">{dari}</span> → <span className="text-emerald-300">{ke}</span></span>
+                <span className="text-gray-400"> · <span className="text-violet-300">{dari}</span>  <span className="text-emerald-300">{ke}</span></span>
               )}
             </p>
             <div className="flex flex-col gap-3">
@@ -420,3 +420,4 @@ export default function Cari() {
     </Suspense>
   );
 }
+
