@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
@@ -158,7 +158,7 @@ export default function Trayek() {
           <>
             <div className="flex items-center gap-3 mb-6">
               <button onClick={kembaliKeList}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20"></button>
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20 transition-all"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
               <div>
                 <div className="flex items-center gap-2">
                   <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[selected.jenis] || 'from-gray-600 to-gray-700'}`}>
@@ -245,7 +245,7 @@ export default function Trayek() {
           <>
             <div className="flex items-center gap-3 mb-6">
               <button onClick={kembaliKeRute}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20"></button>
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-white/20 transition-all"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
               <div>
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-white bg-gradient-to-r ${JENIS_COLOR[selected.jenis] || 'from-gray-600 to-gray-700'}`}>
                   Trayek {selected.kode_trayek}
@@ -346,6 +346,7 @@ export default function Trayek() {
     </main>
   );
 }
+
 
 
 
